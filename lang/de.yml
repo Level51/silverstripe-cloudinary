@@ -1,0 +1,8 @@
+de:
+  Cloudinary:
+    CLOUD_NAME: Cloud Name
+    CTA_DELETE: Löschen
+    CTA_REMOVE: Entfernen
+    CTA_UPLOAD: Upload
+    DESTINATION_FOLDER: Zielordner
+    ERR_DOWNLOAD_NO_PUBLIC_ID: 'Das Bild {ImageID} hat keine "public_id"'

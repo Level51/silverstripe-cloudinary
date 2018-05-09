@@ -1,0 +1,11 @@
+---
+Name: cloudinary
+---
+LeftAndMain:
+  extra_requirements_javascript:
+    - https://widget.cloudinary.com/global/all.js
+Cloudinary:
+  theme: 'white'
+  use_signed: true
+  show_remove: false
+  image_type: 'private'
