@@ -49,7 +49,7 @@ class CloudinaryImage extends DataObject {
         // Always use secure https urls
         $options['secure'] = true;
 
-        return cloudinary_url($this->PublicID, $options);
+        return CloudinaryService::inst()->getCloudinaryUrl($this->PublicID, $options);
     }
 
     public function Fill($width, $height) {
