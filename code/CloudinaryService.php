@@ -78,4 +78,16 @@ class CloudinaryService {
             'attachment' => $asDownload
         ]);
     }
+
+    /**
+     * Get the Cloudinary url for the given public id including options.
+     *
+     * @param string $publicID
+     * @param array  $options
+     *
+     * @return string
+     */
+    public function getCloudinaryUrl($publicID, $options) {
+        return Cloudinary::cloudinary_url($publicID, $options);
+    }
 }
