@@ -56,16 +56,74 @@ class CloudinaryImage extends DataObject {
         return $this->Link();
     }
 
-    public function Fill($width, $height) {
-        $this->transformOptions = [
-            'crop'   => 'fill',
-            'width'  => $width,
-            'height' => $height
-        ];
+    /**
+     * Scale the image to match exactly the given values.
+     *
+     * If both values are defined the image may be stretched or shrunk.
+     * If only one value is defined the image is scaled with respect to the original aspect ratio.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#scale
+     */
+    public function Scale($width, $height) {
+        if (!$width && !$height)
+            return $this;
+
+        $options = ['crop' => 'scale'];
+
+        if ($width)
+            $options['width'] = $width;
+
+        if ($height)
+            $options['height'] = $height;
+
+        $this->transformOptions = $options;
 
         return $this;
     }
 
+    /**
+     * Scale the image to the given height with respect to the original aspect ratio.
+     *
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#scale
+     */
+    public function ScaleHeight($height) {
+        return $this->Scale(null, $height);
+    }
+
+    /**
+     * Scale the image to the given width with respect to the original aspect ratio.
+     *
+     * @param int $width
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#scale
+     */
+    public function ScaleWidth($width) {
+        return $this->Scale($width, null);
+    }
+
+    /**
+     * Scale the image so it fits within the bounding box.
+     *
+     * Respects the original aspect ratio, scales down and up.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#fit
+     */
     public function Fit($width, $height) {
         $this->transformOptions = [
             'crop'   => 'fit',
@@ -76,9 +134,33 @@ class CloudinaryImage extends DataObject {
         return $this;
     }
 
-    public function Pad($width, $height) {
+    /**
+     * Alias for Limit.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     */
+    public function FitMax($width, $height) {
+        return $this->Limit($width, $height);
+    }
+
+    /**
+     * Scale the image so it fits within the bounding box.
+     *
+     * Respects the original aspect ratio, no upscaling.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#limit
+     */
+    public function Limit($width, $height) {
         $this->transformOptions = [
-            'crop'   => 'pad',
+            'crop'   => 'limit',
             'width'  => $width,
             'height' => $height
         ];
@@ -86,17 +168,176 @@ class CloudinaryImage extends DataObject {
         return $this;
     }
 
-    public function ScaleWidth($width) {
+    /**
+     * Scale the image so it fits within the bounding box.
+     *
+     * Respects the original aspect ratio, only upscaling - larger images will stay larger.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#mfit_minimum_fit
+     */
+    public function FitMin($width, $height) {
         $this->transformOptions = [
-            'width' => $width
+            'crop'   => 'mfit',
+            'width'  => $width,
+            'height' => $height
         ];
 
         return $this;
     }
 
-    public function ScaleHeight($height) {
+    /**
+     * Crop the image to exact dimensions.
+     *
+     * Only parts of the image may be visible, scales down and up.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#fill
+     */
+    public function Fill($width, $height) {
         $this->transformOptions = [
+            'crop'   => 'fill',
+            'width'  => $width,
             'height' => $height
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Alias for LimitFill.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     */
+    public function FillMax($width, $height) {
+        return $this->LimitFill($width, $height);
+    }
+
+    /**
+     * Crop the image to exact dimensions.
+     *
+     * Only parts of the image may be visible, no upscaling.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#lfill_limit_fill
+     */
+    public function LimitFill($width, $height) {
+        $this->transformOptions = [
+            'crop'   => 'lfill',
+            'width'  => $width,
+            'height' => $height
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Scale to fit the bounding box, then pad whitespace.
+     *
+     * Retains the original aspect ratio and pads white space with a given color.
+     *
+     * @param int    $width
+     * @param int    $height
+     * @param string $background
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#pad
+     */
+    public function Pad($width, $height, $background = '#fff') {
+        $this->transformOptions = [
+            'crop'       => 'pad',
+            'width'      => $width,
+            'height'     => $height,
+            'background' => $background
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Scale to fit the bounding box, then pad whitespace.
+     *
+     * Retains the original aspect ratio and pads white space with a given color - no upscaling.
+     *
+     * @param int    $width
+     * @param int    $height
+     * @param string $background
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#lpad_limit_pad
+     */
+    public function LimitPad($width, $height, $background = '#fff') {
+        $this->transformOptions = [
+            'crop'       => 'lpad',
+            'width'      => $width,
+            'height'     => $height,
+            'background' => $background
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Scale to fit the bounding box, then pad whitespace.
+     *
+     * Retains the original aspect ratio and pads white space with a given color.
+     * Only if the image is smaller than the given values, larger images will stay larger.
+     *
+     * @param int    $width
+     * @param int    $height
+     * @param string $background
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#mpad_minimum_pad
+     */
+    public function PadMin($width, $height, $background = '#fff') {
+        $this->transformOptions = [
+            'crop'       => 'mpad',
+            'width'      => $width,
+            'height'     => $height,
+            'background' => $background
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Extract a region of the given width and height out of the original image.
+     *
+     * TODO this could be more powerful, Cloudinary supports adding the gravity (e.g. north_west)
+     * or even define an exact starting point through x/y coordinates.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#crop
+     */
+    public function Crop($width, $height) {
+        $this->transformOptions = [
+            'crop'    => 'crop',
+            'width'   => $width,
+            'height'  => $height,
+            'gravity' => 'center' // TODO make maintainable
         ];
 
         return $this;

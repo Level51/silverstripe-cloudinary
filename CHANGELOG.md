@@ -1,6 +1,7 @@
 [Unreleased]
 ## Added
 - getCloudinaryUrl service function
+- Methods for a few image transformations like pad, limit, scale ...
 
 ## Fixed
 - Use the service function to get the cloudinary url within the CloudinaryImage Link() function (ensures proper credentials setup)
