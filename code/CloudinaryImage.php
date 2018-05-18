@@ -14,6 +14,12 @@
 class CloudinaryImage extends DataObject {
 
     private $transformOptions = null;
+    private $effectOptions = null;
+
+    private static $artistic_filters = [
+      'al_dente', 'athena', 'audrey', 'aurora', 'daguerre', 'eucalyptus', 'fes', 'frost', 'hairspray', 'hokusai',
+      'incognito', 'linen', 'peacock', 'primavera', 'quartz', 'red_rock', 'refresh', 'sizzle', 'sonnet', 'ukulele', 'zorro'
+    ];
 
     private static $db = [
         'PublicID'     => 'Varchar(100)',
@@ -36,6 +42,10 @@ class CloudinaryImage extends DataObject {
 
         // Check for transformation options (set through methods like "Fill")
         $options = $this->transformOptions ?: [];
+
+        // Check for additional effect options
+        if ($this->effectOptions)
+            $options = array_merge($options, $this->effectOptions);
 
         // Auto choose file format, uses e.g. webP for supported browsers, see http://cloudinary.com/documentation/image_transformations#automatic_format_selection
         $options['fetch_format'] = 'auto';
@@ -341,6 +351,88 @@ class CloudinaryImage extends DataObject {
         ];
 
         return $this;
+    }
+
+    /**
+     * Add a given effect.
+     *
+     * @param string $effect
+     *
+     * @return CloudinaryImage
+     */
+    private function addEffect($effect) {
+        $this->effectOptions = ['effect' => $effect];
+
+        return $this;
+    }
+
+    /**
+     * Grayscale the image.
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#color_effects
+     */
+    public function Grayscale() {
+        return $this->addEffect('grayscale');
+    }
+
+    /**
+     * Add a sepia effect.
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#color_effects
+     */
+    public function Sepia() {
+        return $this->addEffect('sepia');
+    }
+
+    /**
+     * Append a blur filter.
+     *
+     * @param int $strength
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#blurring_pixelating_and_sharpening_effects
+     */
+    public function Blur($strength = null) {
+        $effect = 'blur';
+        if ($strength)
+            $effect .= ':' . $strength;
+
+        return $this->addEffect($effect);
+    }
+
+    /**
+     * Pixelate the image with a given strength.
+     *
+     * @param int $strength
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#blurring_pixelating_and_sharpening_effects
+     */
+    public function Pixelate($strength = null) {
+        $effect = 'pixelate';
+        if ($strength)
+            $effect .= ':' . $strength;
+
+        return $this->addEffect($effect);
+    }
+
+    /**
+     * Add one of the predefined artistic filter effects.
+     *
+     * @param string $filterName
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#artistic_filter_effects
+     */
+    public function ArtisticFilter($filterName) {
+        return (in_array($filterName, self::$artistic_filters)) ? $this->addEffect('art:' . $filterName) : $this;
     }
 
     public function getTag() {

@@ -2,6 +2,7 @@
 ## Added
 - getCloudinaryUrl service function
 - Methods for a few image transformations like pad, limit, scale ...
+- A few effect methods like grayscale, blur, sepia ...
 
 ## Fixed
 - Use the service function to get the cloudinary url within the CloudinaryImage Link() function (ensures proper credentials setup)
