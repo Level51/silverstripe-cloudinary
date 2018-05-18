@@ -52,6 +52,10 @@ class CloudinaryImage extends DataObject {
         return CloudinaryService::inst()->getCloudinaryUrl($this->PublicID, $options);
     }
 
+    public function forTemplate() {
+        return $this->Link();
+    }
+
     public function Fill($width, $height) {
         $this->transformOptions = [
             'crop'   => 'fill',
