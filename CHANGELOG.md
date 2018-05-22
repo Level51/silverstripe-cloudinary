@@ -6,6 +6,7 @@
 
 ## Fixed
 - Use the service function to get the cloudinary url within the CloudinaryImage Link() function (ensures proper credentials setup)
+- privateDownloadLink if the "$asDownload" param is set to false
 
 [0.1.0] - 2018-05-09
 ## First public release
