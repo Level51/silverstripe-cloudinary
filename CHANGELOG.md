@@ -4,6 +4,9 @@
 - Methods for a few image transformations like pad, limit, scale ...
 - A few effect methods like grayscale, blur, sepia ...
 
+## Changed
+- Return the whole image tag in the forTemplate method
+
 ## Fixed
 - Use the service function to get the cloudinary url within the CloudinaryImage Link() function (ensures proper credentials setup)
 - privateDownloadLink if the "$asDownload" param is set to false

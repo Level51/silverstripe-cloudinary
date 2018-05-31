@@ -63,7 +63,7 @@ class CloudinaryImage extends DataObject {
     }
 
     public function forTemplate() {
-        return $this->Link();
+        return $this->getTag();
     }
 
     /**
