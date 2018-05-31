@@ -62,10 +62,6 @@ class CloudinaryImage extends DataObject {
         // Always use secure https urls
         $options['secure'] = true;
 
-        // Use custom gravity for image cropping if set (through cropper on upload or through the management console)
-        if (Config::inst()->get(Cloudinary::class, 'use_custom_gravity'))
-            $options['gravity'] = 'custom';
-
         return CloudinaryService::inst()->getCloudinaryUrl($this->PublicID, $options);
     }
 
@@ -82,6 +78,16 @@ class CloudinaryImage extends DataObject {
 
     public function forTemplate() {
         return $this->getTag();
+    }
+
+    /**
+     * Use custom gravity for image cropping if enabled.
+     *
+     * The coordinates may be set with the upload widget or through the management console.
+     */
+    private function addCustomGravityIfEnabled() {
+        if (Config::inst()->get(Cloudinary::class, 'use_custom_gravity'))
+            $this->transformOptions['gravity'] = 'custom';
     }
 
     /**
@@ -237,6 +243,8 @@ class CloudinaryImage extends DataObject {
             'height' => $height
         ];
 
+        $this->addCustomGravityIfEnabled();
+
         return $this;
     }
 
@@ -270,6 +278,8 @@ class CloudinaryImage extends DataObject {
             'width'  => $width,
             'height' => $height
         ];
+
+        $this->addCustomGravityIfEnabled();
 
         return $this;
     }
@@ -367,6 +377,8 @@ class CloudinaryImage extends DataObject {
             'height'  => $height,
             'gravity' => 'center' // TODO make maintainable
         ];
+
+        $this->addCustomGravityIfEnabled();
 
         return $this;
     }
