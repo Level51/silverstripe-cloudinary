@@ -38,6 +38,9 @@ class CloudinaryImage extends DataObject {
         CloudinaryService::inst()->destroy($this->PublicID);
     }
 
+    /**
+     * @return string Cloudinary image link including options, transformations etc.
+     */
     public function Link() {
 
         // Check for transformation options (set through methods like "Fill")
@@ -59,7 +62,22 @@ class CloudinaryImage extends DataObject {
         // Always use secure https urls
         $options['secure'] = true;
 
+        // Use custom gravity for image cropping if set (through cropper on upload or through the management console)
+        if (Config::inst()->get(Cloudinary::class, 'use_custom_gravity'))
+            $options['gravity'] = 'custom';
+
         return CloudinaryService::inst()->getCloudinaryUrl($this->PublicID, $options);
+    }
+
+    /**
+     * @return String Link to the image in the Cloudinary media library.
+     */
+    public function getMediaLibraryLink() {
+        return Controller::join_links(
+            'https://cloudinary.com/console/media_library/asset/image',
+            Config::inst()->get('Cloudinary', 'image_type'),
+            $this->PublicID
+        );
     }
 
     public function forTemplate() {
