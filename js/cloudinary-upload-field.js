@@ -54,7 +54,6 @@ require('../css/cloudinary-upload-field.less');
               type    : "GET",
               dataType: "text",
               data    : { data: params_to_sign},
-              complete: function() {console.log("complete")},
               success : function(signature, textStatus, xhr) { callback(signature); },
               error   : function(xhr, status, error) { console.log(xhr, status, error); }
             });

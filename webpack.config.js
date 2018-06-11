@@ -8,7 +8,8 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = env => ({
 
   entry: {
-    'cloudinary-upload-field': './js/cloudinary-upload-field.js'
+    'cloudinary-upload-field': './js/cloudinary-upload-field.js',
+    'cloudinary-multi-upload-field': './js/cloudinary-multi-upload-field.js'
   },
 
   output: {

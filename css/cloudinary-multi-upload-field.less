@@ -1,0 +1,75 @@
+.field.cloudinarymultiupload {
+  label {
+    display: block;
+    float: none;
+    width: auto;
+  }
+
+  .middleColumn {
+    margin-left: 0;
+    width: 100%;
+    clear: both;
+  }
+
+  .cloudinary-multi-upload-field-actions-container {
+    background: #fff;
+    border: 1px solid #b3b3b3;
+    padding: 15px;
+    border-radius: 4px;
+    max-width: 696px;
+    box-sizing: border-box;
+
+    .cloudinary-multi-upload-field-actions {
+      margin-top: 10px;
+    }
+  }
+
+  .cloudinary-multi-upload-items > ul {
+    margin: 0 -10px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+      padding: 10px;
+      background: #fff;
+      margin: 10px;
+      border: 1px solid #ccc;
+      max-width: 250px;
+      text-align: center;
+
+      .cloudinary-multi-upload-item-thumbnail {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 10px;
+      }
+
+      strong {
+        display: block;
+        margin: 10px 0 0;
+      }
+
+      .cloudinary-multi-upload-item-filename {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0;
+      }
+
+      a {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .cloudinary-multi-upload-field-delete {
+        margin-top: 10px;
+      }
+    }
+  }
+}
+

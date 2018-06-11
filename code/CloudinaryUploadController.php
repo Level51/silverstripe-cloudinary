@@ -8,12 +8,14 @@
  */
 class CloudinaryUploadController extends Controller {
 
-    private static $allowed_actions = ['onAfterUpload', 'deleteImage', 'generateSignature'];
+    private static $allowed_actions = ['onAfterUpload', 'onAfterMultipleUpload', 'deleteImage', 'deleteImages', 'generateSignature'];
 
     private static $url_handlers = [
-        'onAfterUpload'     => 'onAfterUpload',
-        'deleteImage'       => 'deleteImage',
-        'generateSignature' => 'generateSignature'
+        'onAfterUpload'         => 'onAfterUpload',
+        'onAfterMultipleUpload' => 'onAfterMultipleUpload',
+        'deleteImage'           => 'deleteImage',
+        'deleteImages'          => 'deleteImages',
+        'generateSignature'     => 'generateSignature'
     ];
 
     public function index() {
@@ -21,23 +23,23 @@ class CloudinaryUploadController extends Controller {
     }
 
     /**
-     * Create a CloudinaryImage object after successful upload.
+     * Create a single CloudinaryImage object from the request vars.
      *
-     * @return int The ID of the newly created image object, linked to the actual object as soon as this is saved.
+     * @param array $vars Response array from the cloudinary upload
+     *
+     * @return CloudinaryImage
      */
-    public function onAfterUpload() {
-        $postVars = $this->getRequest()->postVars();
-
+    private function createImageObject($vars) {
         $image = new CloudinaryImage();
-        $image->PublicID = $postVars['public_id'];
-        $image->Version = $postVars['version'];
-        $image->Format = $postVars['format'];
-        $image->eTag = $postVars['etag'];
-        $image->URL = $postVars['secure_url'];
-        $image->Filename = $postVars['original_filename'];
-        $image->ThumbnailURL = $postVars['thumbnail'];
+        $image->PublicID = $vars['public_id'];
+        $image->Version = $vars['version'];
+        $image->Format = $vars['format'];
+        $image->eTag = $vars['etag'];
+        $image->URL = $vars['secure_url'];
+        $image->Filename = $vars['original_filename'];
+        $image->ThumbnailURL = isset($vars['thumbnail']) ? $vars['thumbnail'] : null;
 
-        $this->extend('onBeforeImageCreated', $image, $postVars);
+        $this->extend('onBeforeImageCreated', $image, $vars);
 
         try {
             $image->write();
@@ -45,9 +47,46 @@ class CloudinaryUploadController extends Controller {
             SS_Log::log($e->getMessage(), SS_Log::ERR);
         }
 
-        $this->extend('onAfterImageCreated', $image, $postVars);
+        $this->extend('onAfterImageCreated', $image, $vars);
 
-        return $image->ID;
+        return $image;
+    }
+
+    /**
+     * Handle single file upload.
+     *
+     * Creates a CloudinaryImage and returns the ID.
+     *
+     * @return int The ID of the newly created image object, linked to the actual object as soon as this is saved.
+     */
+    public function onAfterUpload() {
+        return $this->createImageObject($this->getRequest()->postVars())->ID;
+    }
+
+    /**
+     * Handle multi file upload.
+     *
+     * Creates a CloudinaryImage object for each uploaded image.
+     * The relation to the DataObject is also set.
+     *
+     * @return string
+     * @throws ValidationException
+     */
+    public function onAfterMultipleUpload() {
+        $postVars = $this->getRequest()->postVars();
+        $relField = $postVars['relation']['field'];
+        $relId = $postVars['relation']['id'];
+
+        $response = '';
+        foreach ($postVars['images'] as $imageVars) {
+            $image = $this->createImageObject($imageVars);
+            $image->$relField = $relId;
+            $image->write();
+
+            $response .= $image->renderWith('CloudinaryMultiUploadItem');
+        }
+
+        return $response;
     }
 
     /**
@@ -55,6 +94,13 @@ class CloudinaryUploadController extends Controller {
      */
     public function deleteImage() {
         CloudinaryImage::get()->byID($this->getRequest()->postVar('id'))->delete();
+    }
+
+    /**
+     * Delete multiple CloudinaryImage objects by their IDs.
+     */
+    public function deleteImages() {
+        CloudinaryImage::get()->filter('ID', $this->getRequest()->postVar('ids'))->removeAll();
     }
 
     /**
