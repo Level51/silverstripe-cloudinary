@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals,no-shadow,no-undef,no-underscore-dangle */
+/* eslint-disable */
 // Require styles
 require('../css/cloudinary-multi-upload-field.less');
 
@@ -51,22 +51,24 @@ require('../css/cloudinary-multi-upload-field.less');
         // Show the uploader widget on click
         uploadBtn.on('click', () => {
           // https://cloudinary.com/documentation/upload_widget#upload_widget_options
-          cloudinary.openUploadWidget(options);
-        });
-
-        // Handle DataObject creation as soon as all images have been uploaded
-        $(document).off('cloudinarywidgetsuccess').on('cloudinarywidgetsuccess', (e, response) => {
-          $.ajax({
-            url: `${location.origin}/admin/cloudinary/onAfterMultipleUpload`,
-            type: 'post',
-            data: {
-              images: response,
-              relation: data.relation
-            },
-            success(response) {
-              $(that).find('.cloudinary-multi-upload-items').find('ul').append(response);
+          cloudinary.openUploadWidget(
+            options,
+            (error, result) => {
+              if (result) {
+                $.ajax({
+                  url: `${location.origin}/admin/cloudinary/onAfterMultipleUpload`,
+                  type: 'post',
+                  data: {
+                    images: result,
+                    relation: data.relation
+                  },
+                  success(response) {
+                    $(that).find('.cloudinary-multi-upload-items').find('ul').append(response);
+                  }
+                });
+              }
             }
-          });
+          );
         });
 
         this._super();
