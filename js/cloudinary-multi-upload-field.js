@@ -55,7 +55,7 @@ require('../css/cloudinary-multi-upload-field.less');
         });
 
         // Handle DataObject creation as soon as all images have been uploaded
-        $(document).on('cloudinarywidgetsuccess', (e, response) => {
+        $(document).off('cloudinarywidgetsuccess').on('cloudinarywidgetsuccess', (e, response) => {
           $.ajax({
             url: `${location.origin}/admin/cloudinary/onAfterMultipleUpload`,
             type: 'post',
