@@ -78,15 +78,17 @@ class CloudinaryUploadField extends FormField {
      * Get some information about the linked file if there is any.
      *
      * @return null|ArrayData
+     * @throws Exception
      */
     public function getFile() {
         if ($this->Value()) {
             if ($file = CloudinaryImage::get()->byID($this->Value()))
                 return ArrayData::create([
-                    'Thumbnail' => $file->ThumbnailURL,
-                    'ID'        => $file->ID,
-                    'Filename'  => $file->Filename,
-                    'PublicID'  => $file->PublicID
+                    'Thumbnail'        => $file->ThumbnailURL,
+                    'ID'               => $file->ID,
+                    'Filename'         => $file->Filename,
+                    'PublicID'         => $file->PublicID,
+                    'MediaLibraryLink' => $file->getMediaLibraryLink()
                 ]);
         }
 

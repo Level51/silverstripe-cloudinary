@@ -23,6 +23,9 @@ Cloudinary:
   # Whether to show/hide the remove button
   show_remove: false
   
+  # Whether to append the g_custom option or not
+  use_custom_gravity: true
+  
 ```
 
 ### Features

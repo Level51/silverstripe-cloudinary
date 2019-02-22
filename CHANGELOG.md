@@ -3,7 +3,13 @@
 - getCloudinaryUrl service function
 - Methods for a few image transformations like pad, limit, scale ...
 - A few effect methods like grayscale, blur, sepia ...
+- use_custom_gravity config option
+- Method to get a link to the image resource in the Cloudinary media library
+- Show original filename and the public id within the upload field
 - Readonly behaviour
+
+## Changed
+- Return the whole image tag in the forTemplate method
 
 ## Fixed
 - Use the service function to get the cloudinary url within the CloudinaryImage Link() function (ensures proper credentials setup)

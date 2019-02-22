@@ -38,6 +38,9 @@ class CloudinaryImage extends DataObject {
         CloudinaryService::inst()->destroy($this->PublicID);
     }
 
+    /**
+     * @return string Cloudinary image link including options, transformations etc.
+     */
     public function Link() {
 
         // Check for transformation options (set through methods like "Fill")
@@ -62,8 +65,29 @@ class CloudinaryImage extends DataObject {
         return CloudinaryService::inst()->getCloudinaryUrl($this->PublicID, $options);
     }
 
+    /**
+     * @return String Link to the image in the Cloudinary media library.
+     */
+    public function getMediaLibraryLink() {
+        return Controller::join_links(
+            'https://cloudinary.com/console/media_library/asset/image',
+            Config::inst()->get('Cloudinary', 'image_type'),
+            $this->PublicID
+        );
+    }
+
     public function forTemplate() {
-        return $this->Link();
+        return $this->getTag();
+    }
+
+    /**
+     * Use custom gravity for image cropping if enabled.
+     *
+     * The coordinates may be set with the upload widget or through the management console.
+     */
+    private function addCustomGravityIfEnabled() {
+        if (Config::inst()->get(Cloudinary::class, 'use_custom_gravity'))
+            $this->transformOptions['gravity'] = 'custom';
     }
 
     /**
@@ -219,6 +243,8 @@ class CloudinaryImage extends DataObject {
             'height' => $height
         ];
 
+        $this->addCustomGravityIfEnabled();
+
         return $this;
     }
 
@@ -252,6 +278,8 @@ class CloudinaryImage extends DataObject {
             'width'  => $width,
             'height' => $height
         ];
+
+        $this->addCustomGravityIfEnabled();
 
         return $this;
     }
@@ -349,6 +377,8 @@ class CloudinaryImage extends DataObject {
             'height'  => $height,
             'gravity' => 'center' // TODO make maintainable
         ];
+
+        $this->addCustomGravityIfEnabled();
 
         return $this;
     }

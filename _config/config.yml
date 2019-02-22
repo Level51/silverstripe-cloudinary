@@ -9,3 +9,4 @@ Cloudinary:
   use_signed: true
   show_remove: false
   image_type: 'private'
+  use_custom_gravity: true
