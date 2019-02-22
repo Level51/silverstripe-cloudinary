@@ -12,6 +12,8 @@ class CloudinaryUploadField extends FormField {
     private $cropping_aspect_ratio = null;
     private static $use_signed = true;
 
+    protected $fieldHolderTemplate = 'CloudinaryUploadField_holder';
+
     /**
      * Get the actual upload field.
      *
@@ -26,6 +28,18 @@ class CloudinaryUploadField extends FormField {
         Requirements::css(SILVERSTRIPE_CLOUDINARY_DIR . '/dist/cloudinary-upload-field.css');
 
         return parent::Field($properties);
+    }
+
+    /**
+     * Return a clone with readonly flag set to true.
+     *
+     * @return CloudinaryUploadField|FormField
+     */
+    public function performReadonlyTransformation() {
+        $clone = clone $this;
+        $clone->setReadonly(true);
+
+        return $clone;
     }
 
     /**
@@ -64,15 +78,17 @@ class CloudinaryUploadField extends FormField {
      * Get some information about the linked file if there is any.
      *
      * @return null|ArrayData
+     * @throws Exception
      */
     public function getFile() {
         if ($this->Value()) {
             if ($file = CloudinaryImage::get()->byID($this->Value()))
                 return ArrayData::create([
-                    'Thumbnail' => $file->ThumbnailURL,
-                    'ID'        => $file->ID,
-                    'Filename'  => $file->Filename,
-                    'PublicID'  => $file->PublicID
+                    'Thumbnail'        => $file->ThumbnailURL,
+                    'ID'               => $file->ID,
+                    'Filename'         => $file->Filename,
+                    'PublicID'         => $file->PublicID,
+                    'MediaLibraryLink' => $file->getMediaLibraryLink()
                 ]);
         }
 

@@ -6,3 +6,4 @@ en:
     CTA_UPLOAD: Upload
     DESTINATION_FOLDER: Destination folder
     ERR_DOWNLOAD_NO_PUBLIC_ID: '"public_id" not set for Cloudinary image {ImageID}'
+    READ_ONLY_NO_IMAGE: No Image

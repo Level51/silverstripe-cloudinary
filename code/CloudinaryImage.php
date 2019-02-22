@@ -14,6 +14,12 @@
 class CloudinaryImage extends DataObject {
 
     private $transformOptions = null;
+    private $effectOptions = null;
+
+    private static $artistic_filters = [
+      'al_dente', 'athena', 'audrey', 'aurora', 'daguerre', 'eucalyptus', 'fes', 'frost', 'hairspray', 'hokusai',
+      'incognito', 'linen', 'peacock', 'primavera', 'quartz', 'red_rock', 'refresh', 'sizzle', 'sonnet', 'ukulele', 'zorro'
+    ];
 
     private static $db = [
         'PublicID'     => 'Varchar(100)',
@@ -32,10 +38,17 @@ class CloudinaryImage extends DataObject {
         CloudinaryService::inst()->destroy($this->PublicID);
     }
 
+    /**
+     * @return string Cloudinary image link including options, transformations etc.
+     */
     public function Link() {
 
         // Check for transformation options (set through methods like "Fill")
         $options = $this->transformOptions ?: [];
+
+        // Check for additional effect options
+        if ($this->effectOptions)
+            $options = array_merge($options, $this->effectOptions);
 
         // Auto choose file format, uses e.g. webP for supported browsers, see http://cloudinary.com/documentation/image_transformations#automatic_format_selection
         $options['fetch_format'] = 'auto';
@@ -52,16 +65,99 @@ class CloudinaryImage extends DataObject {
         return CloudinaryService::inst()->getCloudinaryUrl($this->PublicID, $options);
     }
 
-    public function Fill($width, $height) {
-        $this->transformOptions = [
-            'crop'   => 'fill',
-            'width'  => $width,
-            'height' => $height
-        ];
+    /**
+     * @return String Link to the image in the Cloudinary media library.
+     */
+    public function getMediaLibraryLink() {
+        return Controller::join_links(
+            'https://cloudinary.com/console/media_library/asset/image',
+            Config::inst()->get('Cloudinary', 'image_type'),
+            $this->PublicID
+        );
+    }
+
+    public function forTemplate() {
+        return $this->getTag();
+    }
+
+    /**
+     * Use custom gravity for image cropping if enabled.
+     *
+     * The coordinates may be set with the upload widget or through the management console.
+     */
+    private function addCustomGravityIfEnabled() {
+        if (Config::inst()->get(Cloudinary::class, 'use_custom_gravity'))
+            $this->transformOptions['gravity'] = 'custom';
+    }
+
+    /**
+     * Scale the image to match exactly the given values.
+     *
+     * If both values are defined the image may be stretched or shrunk.
+     * If only one value is defined the image is scaled with respect to the original aspect ratio.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#scale
+     */
+    public function Scale($width, $height) {
+        if (!$width && !$height)
+            return $this;
+
+        $options = ['crop' => 'scale'];
+
+        if ($width)
+            $options['width'] = $width;
+
+        if ($height)
+            $options['height'] = $height;
+
+        $this->transformOptions = $options;
 
         return $this;
     }
 
+    /**
+     * Scale the image to the given height with respect to the original aspect ratio.
+     *
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#scale
+     */
+    public function ScaleHeight($height) {
+        return $this->Scale(null, $height);
+    }
+
+    /**
+     * Scale the image to the given width with respect to the original aspect ratio.
+     *
+     * @param int $width
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#scale
+     */
+    public function ScaleWidth($width) {
+        return $this->Scale($width, null);
+    }
+
+    /**
+     * Scale the image so it fits within the bounding box.
+     *
+     * Respects the original aspect ratio, scales down and up.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#fit
+     */
     public function Fit($width, $height) {
         $this->transformOptions = [
             'crop'   => 'fit',
@@ -72,9 +168,33 @@ class CloudinaryImage extends DataObject {
         return $this;
     }
 
-    public function Pad($width, $height) {
+    /**
+     * Alias for Limit.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     */
+    public function FitMax($width, $height) {
+        return $this->Limit($width, $height);
+    }
+
+    /**
+     * Scale the image so it fits within the bounding box.
+     *
+     * Respects the original aspect ratio, no upscaling.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#limit
+     */
+    public function Limit($width, $height) {
         $this->transformOptions = [
-            'crop'   => 'pad',
+            'crop'   => 'limit',
             'width'  => $width,
             'height' => $height
         ];
@@ -82,20 +202,267 @@ class CloudinaryImage extends DataObject {
         return $this;
     }
 
-    public function ScaleWidth($width) {
+    /**
+     * Scale the image so it fits within the bounding box.
+     *
+     * Respects the original aspect ratio, only upscaling - larger images will stay larger.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#mfit_minimum_fit
+     */
+    public function FitMin($width, $height) {
         $this->transformOptions = [
-            'width' => $width
+            'crop'   => 'mfit',
+            'width'  => $width,
+            'height' => $height
         ];
 
         return $this;
     }
 
-    public function ScaleHeight($height) {
+    /**
+     * Crop the image to exact dimensions.
+     *
+     * Only parts of the image may be visible, scales down and up.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#fill
+     */
+    public function Fill($width, $height) {
         $this->transformOptions = [
+            'crop'   => 'fill',
+            'width'  => $width,
             'height' => $height
         ];
 
+        $this->addCustomGravityIfEnabled();
+
         return $this;
+    }
+
+    /**
+     * Alias for LimitFill.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     */
+    public function FillMax($width, $height) {
+        return $this->LimitFill($width, $height);
+    }
+
+    /**
+     * Crop the image to exact dimensions.
+     *
+     * Only parts of the image may be visible, no upscaling.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#lfill_limit_fill
+     */
+    public function LimitFill($width, $height) {
+        $this->transformOptions = [
+            'crop'   => 'lfill',
+            'width'  => $width,
+            'height' => $height
+        ];
+
+        $this->addCustomGravityIfEnabled();
+
+        return $this;
+    }
+
+    /**
+     * Scale to fit the bounding box, then pad whitespace.
+     *
+     * Retains the original aspect ratio and pads white space with a given color.
+     *
+     * @param int    $width
+     * @param int    $height
+     * @param string $background
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#pad
+     */
+    public function Pad($width, $height, $background = '#fff') {
+        $this->transformOptions = [
+            'crop'       => 'pad',
+            'width'      => $width,
+            'height'     => $height,
+            'background' => $background
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Scale to fit the bounding box, then pad whitespace.
+     *
+     * Retains the original aspect ratio and pads white space with a given color - no upscaling.
+     *
+     * @param int    $width
+     * @param int    $height
+     * @param string $background
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#lpad_limit_pad
+     */
+    public function LimitPad($width, $height, $background = '#fff') {
+        $this->transformOptions = [
+            'crop'       => 'lpad',
+            'width'      => $width,
+            'height'     => $height,
+            'background' => $background
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Scale to fit the bounding box, then pad whitespace.
+     *
+     * Retains the original aspect ratio and pads white space with a given color.
+     * Only if the image is smaller than the given values, larger images will stay larger.
+     *
+     * @param int    $width
+     * @param int    $height
+     * @param string $background
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#mpad_minimum_pad
+     */
+    public function PadMin($width, $height, $background = '#fff') {
+        $this->transformOptions = [
+            'crop'       => 'mpad',
+            'width'      => $width,
+            'height'     => $height,
+            'background' => $background
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Extract a region of the given width and height out of the original image.
+     *
+     * TODO this could be more powerful, Cloudinary supports adding the gravity (e.g. north_west)
+     * or even define an exact starting point through x/y coordinates.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#crop
+     */
+    public function Crop($width, $height) {
+        $this->transformOptions = [
+            'crop'    => 'crop',
+            'width'   => $width,
+            'height'  => $height,
+            'gravity' => 'center' // TODO make maintainable
+        ];
+
+        $this->addCustomGravityIfEnabled();
+
+        return $this;
+    }
+
+    /**
+     * Add a given effect.
+     *
+     * @param string $effect
+     *
+     * @return CloudinaryImage
+     */
+    private function addEffect($effect) {
+        $this->effectOptions = ['effect' => $effect];
+
+        return $this;
+    }
+
+    /**
+     * Grayscale the image.
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#color_effects
+     */
+    public function Grayscale() {
+        return $this->addEffect('grayscale');
+    }
+
+    /**
+     * Add a sepia effect.
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#color_effects
+     */
+    public function Sepia() {
+        return $this->addEffect('sepia');
+    }
+
+    /**
+     * Append a blur filter.
+     *
+     * @param int $strength
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#blurring_pixelating_and_sharpening_effects
+     */
+    public function Blur($strength = null) {
+        $effect = 'blur';
+        if ($strength)
+            $effect .= ':' . $strength;
+
+        return $this->addEffect($effect);
+    }
+
+    /**
+     * Pixelate the image with a given strength.
+     *
+     * @param int $strength
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#blurring_pixelating_and_sharpening_effects
+     */
+    public function Pixelate($strength = null) {
+        $effect = 'pixelate';
+        if ($strength)
+            $effect .= ':' . $strength;
+
+        return $this->addEffect($effect);
+    }
+
+    /**
+     * Add one of the predefined artistic filter effects.
+     *
+     * @param string $filterName
+     *
+     * @return CloudinaryImage
+     *
+     * @see https://cloudinary.com/documentation/image_transformations#artistic_filter_effects
+     */
+    public function ArtisticFilter($filterName) {
+        return (in_array($filterName, self::$artistic_filters)) ? $this->addEffect('art:' . $filterName) : $this;
     }
 
     public function getTag() {

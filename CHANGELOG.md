@@ -1,9 +1,19 @@
-[Unreleased]
+[0.2.0] - 2019-02-22
 ## Added
 - getCloudinaryUrl service function
+- Methods for a few image transformations like pad, limit, scale ...
+- A few effect methods like grayscale, blur, sepia ...
+- use_custom_gravity config option
+- Method to get a link to the image resource in the Cloudinary media library
+- Show original filename and the public id within the upload field
+- Readonly behaviour
+
+## Changed
+- Return the whole image tag in the forTemplate method
 
 ## Fixed
 - Use the service function to get the cloudinary url within the CloudinaryImage Link() function (ensures proper credentials setup)
+- privateDownloadLink if the "$asDownload" param is set to false
 
 [0.1.0] - 2018-05-09
 ## First public release

@@ -73,10 +73,12 @@ class CloudinaryService {
      * @return string
      */
     public function privateDownloadLink($publicID, $format, $expires, $asDownload) {
-        return Cloudinary::private_download_url($publicID, $format, [
-            'expires_at' => $expires,
-            'attachment' => $asDownload
-        ]);
+        $params = ['expires_at' => $expires];
+
+        if ($asDownload)
+            $params['attachment'] = true;
+
+        return Cloudinary::private_download_url($publicID, $format, $params);
     }
 
     /**
