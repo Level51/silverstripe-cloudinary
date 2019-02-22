@@ -1,4 +1,4 @@
-[Unreleased]
+[0.2.0] - 2019-02-22
 ## Added
 - getCloudinaryUrl service function
 - Methods for a few image transformations like pad, limit, scale ...
