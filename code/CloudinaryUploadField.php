@@ -12,6 +12,8 @@ class CloudinaryUploadField extends FormField {
     private $cropping_aspect_ratio = null;
     private static $use_signed = true;
 
+    protected $fieldHolderTemplate = 'CloudinaryUploadField_holder';
+
     /**
      * Get the actual upload field.
      *
@@ -26,6 +28,18 @@ class CloudinaryUploadField extends FormField {
         Requirements::css(SILVERSTRIPE_CLOUDINARY_DIR . '/dist/cloudinary-upload-field.css');
 
         return parent::Field($properties);
+    }
+
+    /**
+     * Return a clone with readonly flag set to true.
+     *
+     * @return CloudinaryUploadField|FormField
+     */
+    public function performReadonlyTransformation() {
+        $clone = clone $this;
+        $clone->setReadonly(true);
+
+        return $clone;
     }
 
     /**
