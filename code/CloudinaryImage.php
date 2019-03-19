@@ -34,8 +34,9 @@ class CloudinaryImage extends DataObject {
     public function onBeforeDelete() {
         parent::onBeforeDelete();
 
-        // Delete remote files
-        CloudinaryService::inst()->destroy($this->PublicID);
+        // Delete remote files if there is a public id (not the case for mock images, which are actually not stored at Cloudinary)
+        if ($this->PublicID)
+            CloudinaryService::inst()->destroy($this->PublicID);
     }
 
     /**
