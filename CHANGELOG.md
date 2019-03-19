@@ -1,3 +1,7 @@
+[0.2.1] - 2019-03-19
+## Changed
+- Trigger Cloudinary delete/destroy only if a public id is set
+
 [0.2.0] - 2019-02-22
 ## Added
 - getCloudinaryUrl service function
