@@ -1,10 +1,10 @@
 ---
 Name: cloudinary
 ---
-LeftAndMain:
+SilverStripe\Admin\LeftAndMain:
   extra_requirements_javascript:
     - https://widget.cloudinary.com/global/all.js
-Cloudinary:
+Lvl51\Cloudinary\Cloudinary:
   theme: 'white'
   use_signed: true
   show_remove: false

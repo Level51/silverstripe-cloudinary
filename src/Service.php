@@ -1,32 +1,49 @@
 <?php
 
+namespace Lvl51\Cloudinary;
+
+use Cloudinary;
 use \Cloudinary\Uploader as API;
+use SilverStripe\Core\Config\Config;
 
 /**
- * Class CloudinaryService
+ * Class Service
  */
-class CloudinaryService {
+class Service {
 
+    /**
+     * @var null|Service
+     */
     private static $instance = null;
 
     private function __construct() {
 
         // Set Cloudinary api credentials
         \Cloudinary::config(array(
-            "cloud_name" => Config::inst()->get('Cloudinary', 'cloud_name'),
-            "api_key"    => Config::inst()->get('Cloudinary', 'api_key'),
-            "api_secret" => Config::inst()->get('Cloudinary', 'api_secret')
+            "cloud_name" => self::config()->get('cloud_name'),
+            "api_key"    => self::config()->get('api_key'),
+            "api_secret" => self::config()->get('api_secret')
         ));
     }
 
     private function __clone() { }
 
+    /**
+     * @return Service
+     */
     public static function inst() {
         if (self::$instance === null) {
             self::$instance = new self;
         }
 
         return self::$instance;
+    }
+
+    /**
+     * @return \SilverStripe\Core\Config\Config_ForClass
+     */
+    public static function config() {
+        return Config::forClass('Lvl51\Cloudinary\Cloudinary');
     }
 
     /**
@@ -41,7 +58,7 @@ class CloudinaryService {
     public function destroy($publicID) {
         return API::destroy($publicID, [
                 'invalidate' => true,
-                'type'       => Config::inst()->get('Cloudinary', 'image_type')
+                'type'       => self::config()->get('image_type')
             ]
         );
     }
@@ -58,7 +75,7 @@ class CloudinaryService {
     public function sign($paramsToSign) {
         return Cloudinary::api_sign_request(
             $paramsToSign,
-            Config::inst()->get('Cloudinary', 'api_secret')
+            self::config()->get('api_secret')
         );
     }
 
