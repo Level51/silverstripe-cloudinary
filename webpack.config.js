@@ -27,7 +27,7 @@ module.exports = env => ({
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [['env', {modules: false}], 'stage-3']
+            presets: [['@babel/preset-env', { modules: false }, '@babel/preset-stage-3']]
           }
         }
       },
