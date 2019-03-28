@@ -1,11 +1,11 @@
 # SilverStripe Cloudinary image uploader
-Adds a **CloudinaryImage** data object and an appropriate uploader using Cloudinary's javascript upload widget.
+Adds a **Lvl51\Cloudinary\Image** data object and an appropriate uploader using Cloudinary's javascript upload widget.
 
 ## Setup
 You have to define some mandatory configuration to get started:
 
 ```yaml
-Cloudinary:
+Lvl51\Cloudinary\Cloudinary:
   cloud_name: String, mandatory
   api_key: String, mandatory
   api_secret: String, mandatory
@@ -29,15 +29,15 @@ Cloudinary:
 ```
 
 ### Features
-- CloudinaryUploadField using the javascript upload widget - so direct uploads to Cloudinary
-- Store the relevant information in a CloudinaryImage object 
+- UploadField using the javascript upload widget - so direct uploads to Cloudinary
+- Store the relevant information in a Lvl51\Cloudinary\Image object
 
 ### Requirements
-- SilverStripe ^3.6.5
+- SilverStripe ^4.3
 - cloudinary_php ^1.9
 
 ### Extend
-If you need any further fields just extend the CloudinaryImage class with a data extension. To inject information returned by Cloudinary during the upload create another extension for the CloudinaryUploadController and use one of the two extensions hooks **onBeforeImageCreated** or **onAfterImageCreated**. Both get passed the image object, either before or after the first write.
+If you need any further fields just extend the Lvl51\Cloudinary\Image class with a data extension. To inject information returned by Cloudinary during the upload create another extension for the Lvl51\Cloudinary\UploadController and use one of the two extensions hooks **onBeforeImageCreated** or **onAfterImageCreated**. Both get passed the image object, either before or after the first write.
 
 ## Maintainer
 - Daniel Kliemsch <dk@lvl51.de>

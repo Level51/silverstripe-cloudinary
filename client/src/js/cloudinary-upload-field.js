@@ -48,15 +48,21 @@ require('../css/cloudinary-upload-field.less');
          */
         if (data.use_signed) {
           options.api_key = data.api_key;
-          options.upload_signature = function(callback, params_to_sign){
+          options.upload_signature = function (callback, params_to_sign) {
             $.ajax({
-              url     : `${location.origin}/admin/cloudinary/generateSignature`,
-              type    : "GET",
+              url: `${location.origin}/admin/cloudinary/generateSignature`,
+              type: "GET",
               dataType: "text",
-              data    : { data: params_to_sign},
-              complete: function() {console.log("complete")},
-              success : function(signature, textStatus, xhr) { callback(signature); },
-              error   : function(xhr, status, error) { console.log(xhr, status, error); }
+              data: {data: params_to_sign},
+              complete: function () {
+                console.log("complete")
+              },
+              success: function (signature, textStatus, xhr) {
+                callback(signature);
+              },
+              error: function (xhr, status, error) {
+                console.log(xhr, status, error);
+              }
             });
           };
         }
