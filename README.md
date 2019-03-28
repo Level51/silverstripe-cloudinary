@@ -33,7 +33,7 @@ Lvl51\Cloudinary\Cloudinary:
 - Store the relevant information in a Lvl51\Cloudinary\Image object
 
 ### Requirements
-- SilverStripe ^4.3
+- SilverStripe ^4.3 (see develop-ss3 branch or 0.x.x releases for SS3 support)
 - cloudinary_php ^1.9
 
 ### Extend

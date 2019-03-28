@@ -1,3 +1,7 @@
+[1.0.0] - 2019-03-28
+## Changed
+- Refactor for SilverStripe 4 support - see develop-ss3 branch or 0.x.x releases for SS3
+
 [0.2.1] - 2019-03-19
 ## Changed
 - Trigger Cloudinary delete/destroy only if a public id is set
