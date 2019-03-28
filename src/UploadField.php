@@ -1,18 +1,27 @@
 <?php
 
+namespace Lvl51\Cloudinary;
+
+use SilverStripe\Core\Convert;
+use SilverStripe\Forms\FormField;
+use SilverStripe\View\ArrayData;
+use SilverStripe\View\Requirements;
+
 /**
  * Upload field for cloudinary using their javascript widget.
  *
  * @see https://cloudinary.com/documentation/upload_widget#upload_widget_options for available options
  */
-class CloudinaryUploadField extends FormField {
+class UploadField extends FormField {
 
     private $folder = '';
     private $cropping = 'server';
     private $cropping_aspect_ratio = null;
     private static $use_signed = true;
 
-    protected $fieldHolderTemplate = 'CloudinaryUploadField_holder';
+    protected $fieldHolderTemplate = 'UploadField_holder';
+
+    protected $extraClasses = ['cloudinaryupload'];
 
     /**
      * Get the actual upload field.
@@ -24,8 +33,8 @@ class CloudinaryUploadField extends FormField {
      * @return string
      */
     public function Field($properties = array()) {
-        Requirements::javascript(SILVERSTRIPE_CLOUDINARY_DIR . '/dist/cloudinary-upload-field.js');
-        Requirements::css(SILVERSTRIPE_CLOUDINARY_DIR . '/dist/cloudinary-upload-field.css');
+        Requirements::javascript('level51/silverstripe-cloudinary: client/dist/cloudinary-upload-field.js');
+        Requirements::css('level51/silverstripe-cloudinary: client/dist/cloudinary-upload-field.css');
 
         return parent::Field($properties);
     }
@@ -33,7 +42,7 @@ class CloudinaryUploadField extends FormField {
     /**
      * Return a clone with readonly flag set to true.
      *
-     * @return CloudinaryUploadField|FormField
+     * @return UploadField|FormField
      */
     public function performReadonlyTransformation() {
         $clone = clone $this;
@@ -48,7 +57,7 @@ class CloudinaryUploadField extends FormField {
      * @return boolean
      */
     public function showRemove() {
-        return !!Config::inst()->get('Cloudinary', 'show_remove');
+        return !!Service::config()->get('show_remove');
     }
 
     /**
@@ -60,16 +69,16 @@ class CloudinaryUploadField extends FormField {
         $options = [
             'name'                  => $this->getName(),
             'cloud_name'            => $this->getCloudName(),
-            'upload_preset'         => Config::inst()->get('Cloudinary', 'upload_preset'),
-            'theme'                 => Config::inst()->get('Cloudinary', 'theme'),
+            'upload_preset'         => Service::config()->get('upload_preset'),
+            'theme'                 => Service::config()->get('theme'),
             'folder'                => $this->folder,
             'cropping'              => $this->cropping,
             'cropping_aspect_ratio' => $this->cropping_aspect_ratio,
-            'use_signed'            => Config::inst()->get('Cloudinary', 'use_signed')
+            'use_signed'            => Service::config()->get('use_signed')
         ];
 
         if (self::$use_signed)
-            $options['api_key'] = Config::inst()->get('Cloudinary', 'api_key');
+            $options['api_key'] = Service::config()->get('api_key');
 
         return Convert::array2json($options);
     }
@@ -78,11 +87,11 @@ class CloudinaryUploadField extends FormField {
      * Get some information about the linked file if there is any.
      *
      * @return null|ArrayData
-     * @throws Exception
+     * @throws \Exception
      */
     public function getFile() {
         if ($this->Value()) {
-            if ($file = CloudinaryImage::get()->byID($this->Value()))
+            if ($file = Image::get()->byID($this->Value()))
                 return ArrayData::create([
                     'Thumbnail'        => $file->ThumbnailURL,
                     'ID'               => $file->ID,
@@ -110,7 +119,7 @@ class CloudinaryUploadField extends FormField {
      * @return string
      */
     public function getCloudName() {
-        return Config::inst()->get('Cloudinary', 'cloud_name');
+        return Service::config()->get('cloud_name');
     }
 
     /**

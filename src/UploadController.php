@@ -1,12 +1,17 @@
 <?php
 
+namespace Lvl51\Cloudinary;
+
+use Exception;
+use SilverStripe\Control\Controller;
+
 /**
  * Controller for Cloudinary upload/image specific admin actions.
  *
  * Listens on the /admin/cloudinary route and handles the creation of
- * CloudinaryImage objects and also delete actions.
+ * Image objects and also delete actions.
  */
-class CloudinaryUploadController extends Controller {
+class UploadController extends Controller {
 
     private static $allowed_actions = ['onAfterUpload', 'deleteImage', 'generateSignature'];
 
@@ -16,6 +21,9 @@ class CloudinaryUploadController extends Controller {
         'generateSignature' => 'generateSignature'
     ];
 
+    /**
+     * @throws \SilverStripe\Control\HTTPResponse_Exception
+     */
     public function index() {
         return $this->httpError(403);
     }
@@ -28,7 +36,7 @@ class CloudinaryUploadController extends Controller {
     public function onAfterUpload() {
         $postVars = $this->getRequest()->postVars();
 
-        $image = new CloudinaryImage();
+        $image = new Image();
         $image->PublicID = $postVars['public_id'];
         $image->Version = $postVars['version'];
         $image->Format = $postVars['format'];
@@ -42,7 +50,8 @@ class CloudinaryUploadController extends Controller {
         try {
             $image->write();
         } catch (Exception $e) {
-            SS_Log::log($e->getMessage(), SS_Log::ERR);
+            // TODO logging
+            //SS_Log::log($e->getMessage(), SS_Log::ERR);
         }
 
         $this->extend('onAfterImageCreated', $image, $postVars);
@@ -54,13 +63,13 @@ class CloudinaryUploadController extends Controller {
      * Delete the given CloudinaryImage object. Triggers the remote delete in the onBeforeDelete function.
      */
     public function deleteImage() {
-        CloudinaryImage::get()->byID($this->getRequest()->postVar('id'))->delete();
+        Image::get()->byID($this->getRequest()->postVar('id'))->delete();
     }
 
     /**
      * @return string Generate a signature needed for signed uploads
      */
     public function generateSignature() {
-        return CloudinaryService::inst()->sign($this->getRequest()->getVar('data'));
+        return Service::inst()->sign($this->getRequest()->getVar('data'));
     }
 }

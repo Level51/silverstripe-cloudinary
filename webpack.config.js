@@ -8,11 +8,11 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = env => ({
 
   entry: {
-    'cloudinary-upload-field': './js/cloudinary-upload-field.js'
+    'cloudinary-upload-field': './client/src/js/cloudinary-upload-field.js'
   },
 
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, './client/dist'),
     filename: '[name].js',
     publicPath: ''
   },
@@ -27,7 +27,7 @@ module.exports = env => ({
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [['env', { modules: false }], 'stage-3']
+            presets: [['@babel/preset-env', { modules: false }, '@babel/preset-stage-3']]
           }
         }
       },

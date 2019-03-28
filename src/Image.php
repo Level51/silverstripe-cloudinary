@@ -1,5 +1,12 @@
 <?php
 
+namespace Lvl51\Cloudinary;
+
+use Carbon\Carbon;
+use Exception;
+use SilverStripe\Control\Controller;
+use SilverStripe\ORM\DataObject;
+
 /**
  * DataObject storing relevant information for a cloudinary image file representation.
  *
@@ -11,15 +18,17 @@
  * @property string $Filename
  * @property string $ThumbnailURL
  */
-class CloudinaryImage extends DataObject {
+class Image extends DataObject {
 
     private $transformOptions = null;
     private $effectOptions = null;
 
     private static $artistic_filters = [
-      'al_dente', 'athena', 'audrey', 'aurora', 'daguerre', 'eucalyptus', 'fes', 'frost', 'hairspray', 'hokusai',
-      'incognito', 'linen', 'peacock', 'primavera', 'quartz', 'red_rock', 'refresh', 'sizzle', 'sonnet', 'ukulele', 'zorro'
+        'al_dente', 'athena', 'audrey', 'aurora', 'daguerre', 'eucalyptus', 'fes', 'frost', 'hairspray', 'hokusai',
+        'incognito', 'linen', 'peacock', 'primavera', 'quartz', 'red_rock', 'refresh', 'sizzle', 'sonnet', 'ukulele', 'zorro'
     ];
+
+    private static $table_name = 'CloudinaryImage';
 
     private static $db = [
         'PublicID'     => 'Varchar(100)',
@@ -36,7 +45,7 @@ class CloudinaryImage extends DataObject {
 
         // Delete remote files if there is a public id (not the case for mock images, which are actually not stored at Cloudinary)
         if ($this->PublicID)
-            CloudinaryService::inst()->destroy($this->PublicID);
+            Service::inst()->destroy($this->PublicID);
     }
 
     /**
@@ -63,7 +72,7 @@ class CloudinaryImage extends DataObject {
         // Always use secure https urls
         $options['secure'] = true;
 
-        return CloudinaryService::inst()->getCloudinaryUrl($this->PublicID, $options);
+        return Service::inst()->getCloudinaryUrl($this->PublicID, $options);
     }
 
     /**
@@ -72,7 +81,7 @@ class CloudinaryImage extends DataObject {
     public function getMediaLibraryLink() {
         return Controller::join_links(
             'https://cloudinary.com/console/media_library/asset/image',
-            Config::inst()->get('Cloudinary', 'image_type'),
+            Service::config()->get('image_type'),
             $this->PublicID
         );
     }
@@ -87,7 +96,7 @@ class CloudinaryImage extends DataObject {
      * The coordinates may be set with the upload widget or through the management console.
      */
     private function addCustomGravityIfEnabled() {
-        if (Config::inst()->get(Cloudinary::class, 'use_custom_gravity'))
+        if (Service::config()->get('use_custom_gravity'))
             $this->transformOptions['gravity'] = 'custom';
     }
 
@@ -100,7 +109,7 @@ class CloudinaryImage extends DataObject {
      * @param int $width
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#scale
      */
@@ -126,7 +135,7 @@ class CloudinaryImage extends DataObject {
      *
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#scale
      */
@@ -139,7 +148,7 @@ class CloudinaryImage extends DataObject {
      *
      * @param int $width
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#scale
      */
@@ -155,7 +164,7 @@ class CloudinaryImage extends DataObject {
      * @param int $width
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#fit
      */
@@ -175,7 +184,7 @@ class CloudinaryImage extends DataObject {
      * @param int $width
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      */
     public function FitMax($width, $height) {
         return $this->Limit($width, $height);
@@ -189,7 +198,7 @@ class CloudinaryImage extends DataObject {
      * @param int $width
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#limit
      */
@@ -211,7 +220,7 @@ class CloudinaryImage extends DataObject {
      * @param int $width
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#mfit_minimum_fit
      */
@@ -233,7 +242,7 @@ class CloudinaryImage extends DataObject {
      * @param int $width
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#fill
      */
@@ -255,7 +264,7 @@ class CloudinaryImage extends DataObject {
      * @param int $width
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      */
     public function FillMax($width, $height) {
         return $this->LimitFill($width, $height);
@@ -269,7 +278,7 @@ class CloudinaryImage extends DataObject {
      * @param int $width
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#lfill_limit_fill
      */
@@ -294,7 +303,7 @@ class CloudinaryImage extends DataObject {
      * @param int    $height
      * @param string $background
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#pad
      */
@@ -318,7 +327,7 @@ class CloudinaryImage extends DataObject {
      * @param int    $height
      * @param string $background
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#lpad_limit_pad
      */
@@ -343,7 +352,7 @@ class CloudinaryImage extends DataObject {
      * @param int    $height
      * @param string $background
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#mpad_minimum_pad
      */
@@ -367,7 +376,7 @@ class CloudinaryImage extends DataObject {
      * @param int $width
      * @param int $height
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#crop
      */
@@ -389,7 +398,7 @@ class CloudinaryImage extends DataObject {
      *
      * @param string $effect
      *
-     * @return CloudinaryImage
+     * @return Image
      */
     private function addEffect($effect) {
         $this->effectOptions = ['effect' => $effect];
@@ -400,7 +409,7 @@ class CloudinaryImage extends DataObject {
     /**
      * Grayscale the image.
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#color_effects
      */
@@ -411,7 +420,7 @@ class CloudinaryImage extends DataObject {
     /**
      * Add a sepia effect.
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#color_effects
      */
@@ -424,7 +433,7 @@ class CloudinaryImage extends DataObject {
      *
      * @param int $strength
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#blurring_pixelating_and_sharpening_effects
      */
@@ -441,7 +450,7 @@ class CloudinaryImage extends DataObject {
      *
      * @param int $strength
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#blurring_pixelating_and_sharpening_effects
      */
@@ -458,7 +467,7 @@ class CloudinaryImage extends DataObject {
      *
      * @param string $filterName
      *
-     * @return CloudinaryImage
+     * @return Image
      *
      * @see https://cloudinary.com/documentation/image_transformations#artistic_filter_effects
      */
@@ -476,19 +485,19 @@ class CloudinaryImage extends DataObject {
      * @param bool $asDownload
      *
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     public function getTemporaryDownloadLink($expires = null, $asDownload = true) {
 
         // Break if public id unknown
         if (!$this->PublicID)
-            throw new Exception(_t('Cloudinary.ERR_DOWNLOAD_NO_PUBLIC_ID', null, null, [
+            throw new Exception(_t('Lvl51\Cloudinary\Cloudinary.ERR_DOWNLOAD_NO_PUBLIC_ID', null, null, [
                 'ImageID' => $this->ID
             ]));
 
         if (!$expires)
-            $expires = \Carbon\Carbon::now()->addHour()->format('U');
+            $expires = Carbon::now()->addHour()->format('U');
 
-        return CloudinaryService::inst()->privateDownloadLink($this->PublicID, $this->Format, $expires, $asDownload);
+        return Service::inst()->privateDownloadLink($this->PublicID, $this->Format, $expires, $asDownload);
     }
 }

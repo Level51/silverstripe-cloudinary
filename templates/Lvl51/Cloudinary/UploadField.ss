@@ -10,18 +10,18 @@
                 <strong>Name:</strong> $File.Filename | <strong>Public ID:</strong> <a href="$File.MediaLibraryLink" target="_blank">$File.PublicID</a> <br>
             <% end_if %>
 
-            <%t Cloudinary.CLOUD_NAME %>: <strong>$CloudName</strong>
-            <% if $Folder %>| <%t Cloudinary.DESTINATION_FOLDER %>: <strong>$Folder</strong><% end_if %>
+            <%t Lvl51\\Cloudinary\\Cloudinary.CLOUD_NAME %>: <strong>$CloudName</strong>
+            <% if $Folder %>| <%t Lvl51\\Cloudinary\\Cloudinary.DESTINATION_FOLDER %>: <strong>$Folder</strong><% end_if %>
         </div>
 
         <div>
-            <button class="cloudinary-upload-field-upload"><%t Cloudinary.CTA_UPLOAD %></button>
+            <button class="cloudinary-upload-field-upload"><%t Lvl51\\Cloudinary\\Cloudinary.CTA_UPLOAD %></button>
 
             <% if $showRemove %>
-                <button class="cloudinary-upload-field-remove"><%t Cloudinary.CTA_REMOVE %></button>
+                <button class="cloudinary-upload-field-remove"><%t Lvl51\\Cloudinary\\Cloudinary.CTA_REMOVE %></button>
             <% end_if %>
 
-            <button class="cloudinary-upload-field-delete"><%t Cloudinary.CTA_DELETE %></button>
+            <button class="cloudinary-upload-field-delete"><%t Lvl51\\Cloudinary\\Cloudinary.CTA_DELETE %></button>
         </div>
     </div>
 
