@@ -1,5 +1,7 @@
 ---
 Name: cloudinary-routes
+Before:
+  - 'adminroutes'
 ---
 SilverStripe\Control\Director:
   rules:
