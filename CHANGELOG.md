@@ -1,3 +1,7 @@
+[1.0.1] - 2018-04-16
+## Changed
+- Ensure that the upload controller route is defined before other admin routes
+
 [1.0.0] - 2019-03-28
 ## Changed
 - Refactor for SilverStripe 4 support - see develop-ss3 branch or 0.x.x releases for SS3
