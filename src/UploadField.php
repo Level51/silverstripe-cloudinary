@@ -1,6 +1,6 @@
 <?php
 
-namespace Lvl51\Cloudinary;
+namespace Level51\Cloudinary;
 
 use SilverStripe\Core\Convert;
 use SilverStripe\Forms\FormField;
