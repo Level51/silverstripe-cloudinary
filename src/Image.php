@@ -4,6 +4,7 @@ namespace Level51\Cloudinary;
 
 use Carbon\Carbon;
 use Exception;
+use SilverStripe\Assets\File;
 use SilverStripe\Control\Controller;
 use SilverStripe\ORM\DataObject;
 
@@ -17,6 +18,7 @@ use SilverStripe\ORM\DataObject;
  * @property string $URL
  * @property string $Filename
  * @property string $ThumbnailURL
+ * @property int    $Size File size in bytes
  */
 class Image extends DataObject {
 
@@ -37,7 +39,8 @@ class Image extends DataObject {
         'eTag'         => 'Varchar(100)',
         'URL'          => 'Varchar(255)',
         'Filename'     => 'Varchar(255)',
-        'ThumbnailURL' => 'Varchar(255)'
+        'ThumbnailURL' => 'Varchar(255)',
+        'Size'         => 'Int'
     ];
 
     public function onBeforeDelete() {
@@ -477,6 +480,15 @@ class Image extends DataObject {
 
     public function getTag() {
         return '<img src="' . $this->Link() . '" alt="' . $this->Filename . '" />';
+    }
+
+    /**
+     * Nice formatted file size of the original upload.
+     *
+     * @return string
+     */
+    public function getNiceSize() {
+        return File::format_size($this->Size);
     }
 
     /**
