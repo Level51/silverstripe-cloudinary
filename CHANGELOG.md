@@ -1,3 +1,7 @@
+[1.1.0] - 2018-04-24
+### Changed
+- Namespace update to Level51\Cloudinary
+
 [1.0.1] - 2018-04-16
 ## Changed
 - Ensure that the upload controller route is defined before other admin routes

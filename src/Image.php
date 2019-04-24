@@ -1,6 +1,6 @@
 <?php
 
-namespace Lvl51\Cloudinary;
+namespace Level51\Cloudinary;
 
 use Carbon\Carbon;
 use Exception;
@@ -491,7 +491,7 @@ class Image extends DataObject {
 
         // Break if public id unknown
         if (!$this->PublicID)
-            throw new Exception(_t('Lvl51\Cloudinary\Cloudinary.ERR_DOWNLOAD_NO_PUBLIC_ID', null, null, [
+            throw new Exception(_t('Level51\Cloudinary\Cloudinary.ERR_DOWNLOAD_NO_PUBLIC_ID', null, null, [
                 'ImageID' => $this->ID
             ]));
 

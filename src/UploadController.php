@@ -1,6 +1,6 @@
 <?php
 
-namespace Lvl51\Cloudinary;
+namespace Level51\Cloudinary;
 
 use Exception;
 use SilverStripe\Control\Controller;

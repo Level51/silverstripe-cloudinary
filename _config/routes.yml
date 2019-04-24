@@ -5,4 +5,4 @@ Before:
 ---
 SilverStripe\Control\Director:
   rules:
-    'admin/cloudinary': 'Lvl51\Cloudinary\UploadController'
+    'admin/cloudinary': 'Level51\Cloudinary\UploadController'

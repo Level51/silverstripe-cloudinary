@@ -1,6 +1,6 @@
 <?php
 
-namespace Lvl51\Cloudinary;
+namespace Level51\Cloudinary;
 
 use Cloudinary;
 use \Cloudinary\Uploader as API;
@@ -43,7 +43,7 @@ class Service {
      * @return \SilverStripe\Core\Config\Config_ForClass
      */
     public static function config() {
-        return Config::forClass('Lvl51\Cloudinary\Cloudinary');
+        return Config::forClass('Level51\Cloudinary\Cloudinary');
     }
 
     /**
