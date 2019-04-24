@@ -1,7 +1,7 @@
 {
   "name": "level51/silverstripe-cloudinary",
-  "version": "1.0.1",
-  "time": "2019-04-16",
+  "version": "1.1.0",
+  "time": "2019-04-24",
   "description": "Cloudinary image handling & upload field for SilverStripe",
   "keywords": [
     "silverstripe",
@@ -30,7 +30,7 @@
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "Lvl51\\Cloudinary\\": "src/"
+      "Level51\\Cloudinary\\": "src/"
     }
   }
 }
