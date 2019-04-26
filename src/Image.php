@@ -18,7 +18,9 @@ use SilverStripe\ORM\DataObject;
  * @property string $URL
  * @property string $Filename
  * @property string $ThumbnailURL
- * @property int    $Size File size in bytes
+ * @property int    $Size  File size in bytes
+ * @property int    Width  Image width after upload, so with incoming transformation applied
+ * @property int    Height Image height after upload, so with incoming transformation applied
  */
 class Image extends DataObject {
 
@@ -40,7 +42,9 @@ class Image extends DataObject {
         'URL'          => 'Varchar(255)',
         'Filename'     => 'Varchar(255)',
         'ThumbnailURL' => 'Varchar(255)',
-        'Size'         => 'Int'
+        'Size'         => 'Int',
+        'Width'        => 'Int',
+        'Height'       => 'Int'
     ];
 
     public function onBeforeDelete() {

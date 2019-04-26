@@ -1,6 +1,6 @@
 [Unreleased]
 ### Added
-- Save file size of the initial upload 
+- Save file size, width and height of the initial upload (after incoming transormation) 
 
 [1.1.0] - 2018-04-24
 ### Changed
