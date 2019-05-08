@@ -1,12 +1,15 @@
-[Unreleased]
+[1.1.1] - 2019-05-08
 ### Added
-- Save file size, width and height of the initial upload (after incoming transormation) 
+- Save file size, width and height of the initial upload (after incoming transormation)
 
-[1.1.0] - 2018-04-24
+### Fixed
+- Namespace in the field holder template 
+
+[1.1.0] - 2019-04-24
 ### Changed
 - Namespace update to Level51\Cloudinary
 
-[1.0.1] - 2018-04-16
+[1.0.1] - 2019-04-16
 ## Changed
 - Ensure that the upload controller route is defined before other admin routes
 
