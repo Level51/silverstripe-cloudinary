@@ -7,7 +7,7 @@
             <% if $File %>
                 <img class="cloudinary-upload-field-thumbnail" src="$File.Thumbnail">
             <% else %>
-                <%t Cloudinary.READ_ONLY_NO_IMAGE %>
+                <%t Level51\Cloudinary\Cloudinary.READ_ONLY_NO_IMAGE %>
             <% end_if %>
         <% else %>
             $Field

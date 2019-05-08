@@ -44,6 +44,9 @@ class UploadController extends Controller {
         $image->URL = $postVars['secure_url'];
         $image->Filename = $postVars['original_filename'];
         $image->ThumbnailURL = $postVars['thumbnail'];
+        $image->Size = $postVars['bytes'];
+        $image->Width = $postVars['width'];
+        $image->Height = $postVars['height'];
 
         $this->extend('onBeforeImageCreated', $image, $postVars);
 
