@@ -1,3 +1,7 @@
+[1.1.2] - 2019-05-09
+### Changed
+- Proper classes for the actions/buttons
+
 [1.1.1] - 2019-05-08
 ### Added
 - Save file size, width and height of the initial upload (after incoming transormation)
