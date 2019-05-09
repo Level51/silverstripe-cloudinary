@@ -15,13 +15,13 @@
         </div>
 
         <div>
-            <button class="cloudinary-upload-field-upload"><%t Level51\\Cloudinary\\Cloudinary.CTA_UPLOAD %></button>
+            <button class="cloudinary-upload-field-upload btn btn-outline-primary font-icon-upload"><%t Level51\\Cloudinary\\Cloudinary.CTA_UPLOAD %></button>
 
             <% if $showRemove %>
-                <button class="cloudinary-upload-field-remove"><%t Level51\\Cloudinary\\Cloudinary.CTA_REMOVE %></button>
+                <button class="cloudinary-upload-field-remove btn btn-outline-danger font-icon-trash-bin"><%t Level51\\Cloudinary\\Cloudinary.CTA_REMOVE %></button>
             <% end_if %>
 
-            <button class="cloudinary-upload-field-delete"><%t Level51\\Cloudinary\\Cloudinary.CTA_DELETE %></button>
+            <button class="cloudinary-upload-field-delete btn btn-outline-danger font-icon-trash-bin"><%t Level51\\Cloudinary\\Cloudinary.CTA_DELETE %></button>
         </div>
     </div>
 
