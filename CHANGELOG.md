@@ -1,3 +1,7 @@
+[Unreleased]
+### Changed
+- Updated routes config to fix a interference with default admin/graphql route
+
 [1.1.2] - 2019-05-09
 ### Changed
 - Proper classes for the actions/buttons

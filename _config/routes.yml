@@ -2,6 +2,8 @@
 Name: cloudinary-routes
 Before:
   - 'adminroutes'
+After:
+  - 'admin-graphql-routes'
 ---
 SilverStripe\Control\Director:
   rules:
