@@ -2,6 +2,7 @@
 
 namespace Level51\Cloudinary;
 
+use SilverStripe\Control\Controller;
 use SilverStripe\Core\Convert;
 use SilverStripe\Forms\FormField;
 use SilverStripe\View\ArrayData;
@@ -71,7 +72,7 @@ class UploadField extends FormField {
             'cloud_name'            => $this->getCloudName(),
             'upload_preset'         => Service::config()->get('upload_preset'),
             'theme'                 => Service::config()->get('theme'),
-            'folder'                => $this->folder,
+            'folder'                => $this->getFolder(),
             'cropping'              => $this->cropping,
             'cropping_aspect_ratio' => $this->cropping_aspect_ratio,
             'use_signed'            => Service::config()->get('use_signed')
@@ -110,7 +111,12 @@ class UploadField extends FormField {
      * @return string
      */
     public function getFolder() {
-        return $this->folder;
+        $root = Service::config()->get('root_folder');
+
+        if (!$this->folder)
+            return $root;
+
+        return Controller::join_links($root, $this->folder);
     }
 
     /**

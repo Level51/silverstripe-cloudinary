@@ -1,4 +1,7 @@
 [Unreleased]
+### Added
+- `root_folder` config value, allows to use a folder as root for all upload fields
+
 ### Changed
 - Updated routes config to fix a interference with default admin/graphql route
 
