@@ -1,5 +1,6 @@
-[Unreleased]
+[1.1.3] - 2019-06-03
 ### Added
+- Option to make Cloudinary meta data less prominent
 - `root_folder` config value, allows to use a folder as root for all upload fields
 
 ### Changed
