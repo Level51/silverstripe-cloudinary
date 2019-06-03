@@ -10,3 +10,4 @@ Level51\Cloudinary\Cloudinary:
   show_remove: false
   image_type: 'private'
   use_custom_gravity: true
+  root_folder: ''

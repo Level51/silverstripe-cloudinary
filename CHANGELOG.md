@@ -1,3 +1,11 @@
+[1.1.3] - 2019-06-03
+### Added
+- Option to make Cloudinary meta data less prominent
+- `root_folder` config value, allows to use a folder as root for all upload fields
+
+### Changed
+- Updated routes config to fix a interference with default admin/graphql route
+
 [1.1.2] - 2019-05-09
 ### Changed
 - Proper classes for the actions/buttons
