@@ -19,7 +19,7 @@
     "php": ">=7.0",
     "silverstripe/framework": "^4.3",
     "cloudinary/cloudinary_php": "^1.9",
-    "nesbot/carbon": "^2.0.0"
+    "nesbot/carbon": "^1.34"
   },
   "extra": {
     "installer-name": "cloudinary",
