@@ -1,3 +1,7 @@
+[Unreleased]
+### Changed
+- Updated carbon dependency to new major version (2.0.0)
+
 [1.1.3] - 2019-06-03
 ### Added
 - Option to make Cloudinary meta data less prominent
