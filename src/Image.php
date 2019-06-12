@@ -522,18 +522,19 @@ class Image extends DataObject {
      */
     public function flatten() {
         $payload = [
-            'id'           => $this->ID,
-            'publicId'     => $this->PublicID,
-            'version'      => $this->Version,
-            'format'       => $this->Format,
-            'etag'         => $this->eTag,
-            'url'          => $this->URL,
-            'filename'     => $this->Filename,
-            'thumbnailURL' => $this->ThumbnailURL,
-            'size'         => $this->Size,
-            'niceSize'     => $this->getNiceSize(),
-            'width'        => $this->Width,
-            'height'       => $this->Height
+            'id'               => $this->ID,
+            'publicID'         => $this->PublicID,
+            'version'          => $this->Version,
+            'format'           => $this->Format,
+            'etag'             => $this->eTag,
+            'url'              => $this->URL,
+            'filename'         => $this->Filename,
+            'thumbnailURL'     => $this->ThumbnailURL,
+            'size'             => $this->Size,
+            'niceSize'         => $this->getNiceSize(),
+            'width'            => $this->Width,
+            'height'           => $this->Height,
+            'mediaLibraryLink' => $this->getMediaLibraryLink()
         ];
 
         $this->extend('updateFlatten', $payload);

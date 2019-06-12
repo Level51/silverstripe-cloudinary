@@ -1,36 +1,50 @@
 <template>
   <div class="level51-cu-component">
     <div
-      v-if="file">
-      <div class="level51-cu-thumbnailContainer">
-        <img
-          class="level51-cu-thumbnail"
-          :src="file.thumbnailURL">
-      </div>
+      v-if="file"
+      class="level51-cu-thumbnailContainer">
+      <img
+        class="level51-cu-thumbnail"
+        :src="file.thumbnailURL">
     </div>
 
-    <div class="level51-cu-actions">
-      <button
-        class="level51-cu-uploadBtn btn btn-outline-primary font-icon-upload"
-        @click="openWidget">
-        Upload
-      </button>
-
-      <!-- TODO implement remove action -->
-      <button
-        v-if="showRemove"
-        class="level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin"
-        @click.prevent="removeFile">
-        Remove
-      </button>
-
-      <!-- TODO handle delete action -->
-      <button
+    <div>
+      <div
         v-if="file"
-        class="level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin"
-        @click.prevent="deleteFile">
-        Delete
-      </button>
+        class="level51-cu-fileInfo">
+        <strong>Name:</strong> {{ file.filename }} |
+        <strong>Public ID:</strong>
+        <a
+          :href="file.mediaLibraryLink"
+          target="_blank"
+          rel="nofollow noopener">
+          {{ file.publicID }}
+        </a>
+      </div>
+
+      <div class="level51-cu-actions">
+        <button
+          class="level51-cu-uploadBtn btn btn-outline-primary font-icon-upload"
+          @click="openWidget">
+          Upload
+        </button>
+
+        <!-- TODO implement remove action -->
+        <button
+          v-if="showRemove"
+          class="level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin"
+          @click.prevent="removeFile">
+          Remove
+        </button>
+
+        <!-- TODO handle delete action -->
+        <button
+          v-if="file"
+          class="level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin"
+          @click.prevent="deleteFile">
+          Delete
+        </button>
+      </div>
     </div>
 
     <input
@@ -129,6 +143,7 @@ export default {
         options,
         (error, result) => {
           if (!error && result && result.event === 'success') {
+            console.log('cl success callback, result', result);
             axios.post(
               `${location.origin}/admin/cloudinary/onAfterUpload`,
               result.info
@@ -170,9 +185,16 @@ export default {
     border-radius: @border-radius;
     background: @color-mono-100;
     padding: @space-2;
-    height: 68px;
+    min-height: 68px;
     display: flex;
-    justify-content: center;
     align-items: center;
+
+    .level51-cu-thumbnailContainer {
+      margin-right: @space-2;
+    }
+
+    .level51-cu-fileInfo {
+      margin-bottom: @space-2;
+    }
   }
 </style>

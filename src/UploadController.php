@@ -43,7 +43,7 @@ class UploadController extends Controller {
         // Try to get a thumbnail, either directly from the "thumbnail_url" if set (non-private upload)
         // Or use the first eager transformation if set
         $thumbnail = null;
-        if (isset($postVars['thumbnail_url']) && $postVars['thumbnail_url'])
+        if ($postVars['type'] === 'upload' && isset($postVars['thumbnail_url']) && $postVars['thumbnail_url'])
             $thumbnail = $postVars['thumbnail_url'];
         else if (isset($postVars['eager']) && is_array($postVars['eager']) && !empty($postVars['eager']))
             $thumbnail = $postVars['eager'][0]['secure_url'];

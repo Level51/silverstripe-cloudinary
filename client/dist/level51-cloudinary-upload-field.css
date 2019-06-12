@@ -3,10 +3,15 @@
   border-radius: 5px;
   background: #fff;
   padding: 10px;
-  height: 68px;
+  min-height: 68px;
   display: flex;
-  justify-content: center;
   align-items: center;
+}
+.level51-cu-component .level51-cu-thumbnailContainer {
+  margin-right: 10px;
+}
+.level51-cu-component .level51-cu-fileInfo {
+  margin-bottom: 10px;
 }
 
 

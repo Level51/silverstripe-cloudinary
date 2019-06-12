@@ -1731,7 +1731,7 @@ module.exports = function spread(callback) {
 
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
-var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
 
 /*global toString:true*/
 
@@ -2066,28 +2066,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/axios/node_modules/is-buffer/index.js":
-/*!************************************************************!*\
-  !*** ./node_modules/axios/node_modules/is-buffer/index.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/*!
- * Determine if an object is a Buffer
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-
-module.exports = function isBuffer (obj) {
-  return obj != null && obj.constructor != null &&
-    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./client/src/js/App.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--0!./node_modules/vue-loader/lib??vue-loader-options!./client/src/js/App.vue?vue&type=script&lang=js& ***!
@@ -2099,6 +2077,20 @@ module.exports = function isBuffer (obj) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2218,6 +2210,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.widget = cloudinary.createUploadWidget(options, function (error, result) {
         if (!error && result && result.event === 'success') {
+          console.log('cl success callback, result', result);
           axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(location.origin, "/admin/cloudinary/onAfterUpload"), result.info).then(function (response) {
             _this.file = response.data;
           });
@@ -11232,6 +11225,28 @@ module.exports = __webpack_require__(/*! ../modules/_core */ "./node_modules/cor
 
 /***/ }),
 
+/***/ "./node_modules/is-buffer/index.js":
+/*!*****************************************!*\
+  !*** ./node_modules/is-buffer/index.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+module.exports = function isBuffer (obj) {
+  return obj != null && obj.constructor != null &&
+    typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js?!./client/src/js/App.vue?vue&type=style&index=0&lang=less&":
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/mini-css-extract-plugin/dist/loader.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js!./node_modules/vue-loader/lib??vue-loader-options!./client/src/js/App.vue?vue&type=style&index=0&lang=less& ***!
@@ -12465,60 +12480,80 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "level51-cu-component" }, [
     _vm.file
-      ? _c("div", [
-          _c("div", { staticClass: "level51-cu-thumbnailContainer" }, [
-            _c("img", {
-              staticClass: "level51-cu-thumbnail",
-              attrs: { src: _vm.file.thumbnailURL }
-            })
-          ])
+      ? _c("div", { staticClass: "level51-cu-thumbnailContainer" }, [
+          _c("img", {
+            staticClass: "level51-cu-thumbnail",
+            attrs: { src: _vm.file.thumbnailURL }
+          })
         ])
       : _vm._e(),
     _vm._v(" "),
-    _c("div", { staticClass: "level51-cu-actions" }, [
-      _c(
-        "button",
-        {
-          staticClass:
-            "level51-cu-uploadBtn btn btn-outline-primary font-icon-upload",
-          on: { click: _vm.openWidget }
-        },
-        [_vm._v("\n      Upload\n    ")]
-      ),
-      _vm._v(" "),
-      _vm.showRemove
-        ? _c(
-            "button",
-            {
-              staticClass:
-                "level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.removeFile($event)
+    _c("div", [
+      _vm.file
+        ? _c("div", { staticClass: "level51-cu-fileInfo" }, [
+            _c("strong", [_vm._v("Name:")]),
+            _vm._v(" " + _vm._s(_vm.file.filename) + " |\n      "),
+            _c("strong", [_vm._v("Public ID:")]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                attrs: {
+                  href: _vm.file.mediaLibraryLink,
+                  target: "_blank",
+                  rel: "nofollow noopener"
                 }
-              }
-            },
-            [_vm._v("\n      Remove\n    ")]
-          )
+              },
+              [_vm._v("\n        " + _vm._s(_vm.file.publicID) + "\n      ")]
+            )
+          ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.file
-        ? _c(
-            "button",
-            {
-              staticClass:
-                "level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.deleteFile($event)
+      _c("div", { staticClass: "level51-cu-actions" }, [
+        _c(
+          "button",
+          {
+            staticClass:
+              "level51-cu-uploadBtn btn btn-outline-primary font-icon-upload",
+            on: { click: _vm.openWidget }
+          },
+          [_vm._v("\n        Upload\n      ")]
+        ),
+        _vm._v(" "),
+        _vm.showRemove
+          ? _c(
+              "button",
+              {
+                staticClass:
+                  "level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.removeFile($event)
+                  }
                 }
-              }
-            },
-            [_vm._v("\n      Delete\n    ")]
-          )
-        : _vm._e()
+              },
+              [_vm._v("\n        Remove\n      ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.file
+          ? _c(
+              "button",
+              {
+                staticClass:
+                  "level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.deleteFile($event)
+                  }
+                }
+              },
+              [_vm._v("\n        Delete\n      ")]
+            )
+          : _vm._e()
+      ])
     ]),
     _vm._v(" "),
     _c("input", {
