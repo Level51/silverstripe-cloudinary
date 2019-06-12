@@ -1,3 +1,12 @@
+<div
+    class="level51-cloudinaryUpload"
+    id="$ID"
+    data-payload='$Payload.RAW'>
+    <level51-cloudinary-upload />
+</div>
+
+<%-- TODO cleanup after full migration to vue component --%>
+<%--
 <div id="uploader-{$Name}" class="cloudinary-upload-field" data-options='$Options'>
     <div class="cloudinary-upload-field-thumbnail">
         <img class="cloudinary-upload-field-thumbnail" src="$File.Thumbnail">
@@ -41,3 +50,4 @@
         <div class="cloudinary-metainfo" title="<%t Level51\\Cloudinary\\Cloudinary.CLOUD_NAME %>: $CloudName<% if $Folder %> | <%t Level51\\Cloudinary\\Cloudinary.DESTINATION_FOLDER %>: $Folder<% end_if %>">Cloudinary Info</div>
     <% end_if %>
 </div>
+--%>

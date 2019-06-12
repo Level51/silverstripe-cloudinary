@@ -3,7 +3,7 @@ Name: cloudinary
 ---
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_javascript:
-    - https://widget.cloudinary.com/global/all.js
+    - https://widget.cloudinary.com/v2.0/global/all.js
 Level51\Cloudinary\Cloudinary:
   theme: 'white'
   use_signed: true

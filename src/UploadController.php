@@ -4,6 +4,7 @@ namespace Level51\Cloudinary;
 
 use Exception;
 use SilverStripe\Control\Controller;
+use SilverStripe\Core\Convert;
 
 /**
  * Controller for Cloudinary upload/image specific admin actions.
@@ -31,10 +32,21 @@ class UploadController extends Controller {
     /**
      * Create a CloudinaryImage object after successful upload.
      *
-     * @return int The ID of the newly created image object, linked to the actual object as soon as this is saved.
+     * @return array|bool Flat version of the newly created image object, linked to the actual object as soon as this is saved.
      */
     public function onAfterUpload() {
-        $postVars = $this->getRequest()->postVars();
+        $body = $this->getRequest()->getBody();
+
+        if (!$body || !($postVars = json_decode($body, true)) || !$postVars || empty($postVars))
+            return false;
+
+        // Try to get a thumbnail, either directly from the "thumbnail_url" if set (non-private upload)
+        // Or use the first eager transformation if set
+        $thumbnail = null;
+        if (isset($postVars['thumbnail_url']) && $postVars['thumbnail_url'])
+            $thumbnail = $postVars['thumbnail_url'];
+        else if (isset($postVars['eager']) && is_array($postVars['eager']) && !empty($postVars['eager']))
+            $thumbnail = $postVars['eager'][0]['secure_url'];
 
         $image = new Image();
         $image->PublicID = $postVars['public_id'];
@@ -43,7 +55,7 @@ class UploadController extends Controller {
         $image->eTag = $postVars['etag'];
         $image->URL = $postVars['secure_url'];
         $image->Filename = $postVars['original_filename'];
-        $image->ThumbnailURL = $postVars['thumbnail'];
+        $image->ThumbnailURL = $thumbnail;
         $image->Size = $postVars['bytes'];
         $image->Width = $postVars['width'];
         $image->Height = $postVars['height'];
@@ -59,20 +71,30 @@ class UploadController extends Controller {
 
         $this->extend('onAfterImageCreated', $image, $postVars);
 
-        return $image->ID;
+        return json_encode($image->flatten());
     }
 
     /**
      * Delete the given CloudinaryImage object. Triggers the remote delete in the onBeforeDelete function.
      */
     public function deleteImage() {
-        Image::get()->byID($this->getRequest()->postVar('id'))->delete();
+        $body = $this->getRequest()->getBody();
+        if (!$body) return false;
+
+        $body = json_decode($body, true);
+
+        if (!$body || empty($body) || !isset($body['id']))
+            return false;
+
+        Image::get()->byID($body['id'])->delete();
+
+        return true;
     }
 
     /**
      * @return string Generate a signature needed for signed uploads
      */
     public function generateSignature() {
-        return Service::inst()->sign($this->getRequest()->getVar('data'));
+        return Service::inst()->sign($this->getRequest()->getVars());
     }
 }
