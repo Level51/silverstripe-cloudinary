@@ -59,9 +59,10 @@ class Image extends DataObject {
      * @return string Cloudinary image link including options, transformations etc.
      */
     public function Link() {
+        $options = [];
 
-        // Check for transformation options (set through methods like "Fill")
-        $options = $this->transformOptions ?: [];
+        if ($this->transformOptions)
+            $options['transformation'] = $this->transformOptions;
 
         // Check for additional effect options
         if ($this->effectOptions)
@@ -396,6 +397,34 @@ class Image extends DataObject {
         ];
 
         $this->addCustomGravityIfEnabled();
+
+        return $this;
+    }
+
+    /**
+     * Crop to custom coordinates/gravity if available, then scale/crop to the exact dimensions.
+     *
+     * @param int $width
+     * @param int $height
+     * @param bool $round Return a rounded image
+     *
+     * @return $this
+     */
+    public function CropScale($width, $height, $round = false) {
+        $this->transformOptions = [
+            [
+                'crop'    => 'crop',
+                'gravity' => 'custom'
+            ],
+            [
+                'crop'   => 'scale',
+                'width'  => $width,
+                'height' => $height
+            ]
+        ];
+
+        if ($round)
+            $this->transformOptions[0]['radius'] = 'max';
 
         return $this;
     }

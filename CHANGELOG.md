@@ -1,3 +1,8 @@
+[1.1.4] - 2019-06-12
+### Added
+- Possibility to chain multiple transformations
+- "CropScale" method, crop to custom coordinates/gravity if available, then scale/crop to the exact dimensions.
+
 [1.1.3] - 2019-06-03
 ### Added
 - Option to make Cloudinary meta data less prominent
