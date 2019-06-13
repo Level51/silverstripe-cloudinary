@@ -1,11 +1,17 @@
 .level51-cu-component {
-  border: 2px dashed #c1cad9;
+  border: 2px dashed #cccccc;
   border-radius: 5px;
   background: #fff;
   padding: 10px;
   min-height: 68px;
   display: flex;
   align-items: center;
+  transition: all 250ms ease-in-out;
+}
+.level51-cu-component.level51-cu-component--dragging {
+  border-color: #65ac1e;
+  box-shadow: inset 0 0 10px #e6e6e6;
+  cursor: copy;
 }
 .level51-cu-component .level51-cu-thumbnailContainer {
   margin-right: 10px;

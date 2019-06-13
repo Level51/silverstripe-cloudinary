@@ -1,5 +1,12 @@
 <template>
-  <div class="level51-cu-component">
+  <div
+    class="level51-cu-component"
+    :class="{'level51-cu-component--dragging': isDragging}"
+    @dragover="isDragging = true"
+    @dragenter="isDragging = true"
+    @dragleave="isDragging = false"
+    @dragend="isDragging = false"
+    @drop.prevent="handleFileDrop">
     <div
       v-if="file"
       class="level51-cu-thumbnailContainer">
@@ -26,10 +33,14 @@
         <button
           class="level51-cu-uploadBtn btn btn-outline-primary font-icon-upload"
           @click="openWidget">
-          Upload
+          <template v-if="file">
+            Upload new
+          </template>
+          <template v-else>
+            Upload image
+          </template>
         </button>
 
-        <!-- TODO implement remove action -->
         <button
           v-if="showRemove"
           class="level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin"
@@ -37,7 +48,6 @@
           Remove
         </button>
 
-        <!-- TODO handle delete action -->
         <button
           v-if="file"
           class="level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin"
@@ -61,7 +71,6 @@ import axios from 'axios';
 // TODO localization
 // TODO styling
 // TODO meta data (always visible || showCloudName = false)
-// TODO drag&drop handling?
 export default {
   props: {
     payload: {
@@ -72,12 +81,22 @@ export default {
   data() {
     return {
       widget: null,
-      file: null
+      file: null,
+      isDragging: false
     };
   },
   created() {
     if (this.payload.file) this.file = this.payload.file;
     this.init();
+  },
+  mounted() {
+    // Prevent default drag behaviour
+    ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach((event) => {
+      this.$el.addEventListener(event, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    });
   },
   computed: {
     value() {
@@ -154,8 +173,9 @@ export default {
         }
       );
     },
-    openWidget() {
-      this.widget.open();
+    openWidget(file = null) {
+      if (file) this.widget.open(null, { files: [file] });
+      else this.widget.open();
     },
     removeFile() {
       this.file = null;
@@ -172,6 +192,14 @@ export default {
         // TODO error handling?
         if (response.data) this.file = null;
       });
+    },
+    handleFileDrop(event) {
+      this.isDragging = false;
+      event.preventDefault();
+
+      this.openWidget(event.dataTransfer.files[0]);
+
+      return false;
     }
   }
 };
@@ -181,13 +209,20 @@ export default {
   @import "~styles/vars";
 
   .level51-cu-component {
-    border: 2px dashed @color-border;
+    border: 2px dashed @color-mono-80;
     border-radius: @border-radius;
     background: @color-mono-100;
     padding: @space-2;
     min-height: 68px;
     display: flex;
     align-items: center;
+    transition: all 250ms ease-in-out;
+
+    &.level51-cu-component--dragging {
+      border-color: @color-success;
+      box-shadow: inset 0 0 10px @color-mono-90;
+      cursor: copy;
+    }
 
     .level51-cu-thumbnailContainer {
       margin-right: @space-2;

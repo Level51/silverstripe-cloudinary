@@ -2134,10 +2134,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
  // TODO localization
 // TODO styling
 // TODO meta data (always visible || showCloudName = false)
-// TODO drag&drop handling?
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2149,12 +2158,24 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       widget: null,
-      file: null
+      file: null,
+      isDragging: false
     };
   },
   created: function created() {
     if (this.payload.file) this.file = this.payload.file;
     this.init();
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    // Prevent default drag behaviour
+    ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'].forEach(function (event) {
+      _this.$el.addEventListener(event, function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    });
   },
   computed: {
     value: function value() {
@@ -2166,7 +2187,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     init: function init() {
-      var _this = this;
+      var _this2 = this;
 
       // Define basic options
       var options = {
@@ -2212,19 +2233,22 @@ __webpack_require__.r(__webpack_exports__);
         if (!error && result && result.event === 'success') {
           console.log('cl success callback, result', result);
           axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(location.origin, "/admin/cloudinary/onAfterUpload"), result.info).then(function (response) {
-            _this.file = response.data;
+            _this2.file = response.data;
           });
         }
       });
     },
     openWidget: function openWidget() {
-      this.widget.open();
+      var file = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      if (file) this.widget.open(null, {
+        files: [file]
+      });else this.widget.open();
     },
     removeFile: function removeFile() {
       this.file = null;
     },
     deleteFile: function deleteFile() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("".concat(location.origin, "/admin/cloudinary/deleteImage"), {
         data: {
@@ -2232,8 +2256,14 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         // TODO error handling?
-        if (response.data) _this2.file = null;
+        if (response.data) _this3.file = null;
       });
+    },
+    handleFileDrop: function handleFileDrop(event) {
+      this.isDragging = false;
+      event.preventDefault();
+      this.openWidget(event.dataTransfer.files[0]);
+      return false;
     }
   }
 });
@@ -12478,89 +12508,119 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "level51-cu-component" }, [
-    _vm.file
-      ? _c("div", { staticClass: "level51-cu-thumbnailContainer" }, [
-          _c("img", {
-            staticClass: "level51-cu-thumbnail",
-            attrs: { src: _vm.file.thumbnailURL }
-          })
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c("div", [
+  return _c(
+    "div",
+    {
+      staticClass: "level51-cu-component",
+      class: { "level51-cu-component--dragging": _vm.isDragging },
+      on: {
+        dragover: function($event) {
+          _vm.isDragging = true
+        },
+        dragenter: function($event) {
+          _vm.isDragging = true
+        },
+        dragleave: function($event) {
+          _vm.isDragging = false
+        },
+        dragend: function($event) {
+          _vm.isDragging = false
+        },
+        drop: function($event) {
+          $event.preventDefault()
+          return _vm.handleFileDrop($event)
+        }
+      }
+    },
+    [
       _vm.file
-        ? _c("div", { staticClass: "level51-cu-fileInfo" }, [
-            _c("strong", [_vm._v("Name:")]),
-            _vm._v(" " + _vm._s(_vm.file.filename) + " |\n      "),
-            _c("strong", [_vm._v("Public ID:")]),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                attrs: {
-                  href: _vm.file.mediaLibraryLink,
-                  target: "_blank",
-                  rel: "nofollow noopener"
-                }
-              },
-              [_vm._v("\n        " + _vm._s(_vm.file.publicID) + "\n      ")]
-            )
+        ? _c("div", { staticClass: "level51-cu-thumbnailContainer" }, [
+            _c("img", {
+              staticClass: "level51-cu-thumbnail",
+              attrs: { src: _vm.file.thumbnailURL }
+            })
           ])
         : _vm._e(),
       _vm._v(" "),
-      _c("div", { staticClass: "level51-cu-actions" }, [
-        _c(
-          "button",
-          {
-            staticClass:
-              "level51-cu-uploadBtn btn btn-outline-primary font-icon-upload",
-            on: { click: _vm.openWidget }
-          },
-          [_vm._v("\n        Upload\n      ")]
-        ),
-        _vm._v(" "),
-        _vm.showRemove
-          ? _c(
-              "button",
-              {
-                staticClass:
-                  "level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin",
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.removeFile($event)
+      _c("div", [
+        _vm.file
+          ? _c("div", { staticClass: "level51-cu-fileInfo" }, [
+              _c("strong", [_vm._v("Name:")]),
+              _vm._v(" " + _vm._s(_vm.file.filename) + " |\n      "),
+              _c("strong", [_vm._v("Public ID:")]),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  attrs: {
+                    href: _vm.file.mediaLibraryLink,
+                    target: "_blank",
+                    rel: "nofollow noopener"
                   }
-                }
-              },
-              [_vm._v("\n        Remove\n      ")]
-            )
+                },
+                [_vm._v("\n        " + _vm._s(_vm.file.publicID) + "\n      ")]
+              )
+            ])
           : _vm._e(),
         _vm._v(" "),
-        _vm.file
-          ? _c(
-              "button",
-              {
-                staticClass:
-                  "level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin",
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.deleteFile($event)
+        _c("div", { staticClass: "level51-cu-actions" }, [
+          _c(
+            "button",
+            {
+              staticClass:
+                "level51-cu-uploadBtn btn btn-outline-primary font-icon-upload",
+              on: { click: _vm.openWidget }
+            },
+            [
+              _vm.file
+                ? [_vm._v("\n          Upload new\n        ")]
+                : [_vm._v("\n          Upload image\n        ")]
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _vm.showRemove
+            ? _c(
+                "button",
+                {
+                  staticClass:
+                    "level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.removeFile($event)
+                    }
                   }
-                }
-              },
-              [_vm._v("\n        Delete\n      ")]
-            )
-          : _vm._e()
-      ])
-    ]),
-    _vm._v(" "),
-    _c("input", {
-      attrs: { type: "hidden", id: _vm.payload.id, name: _vm.payload.name },
-      domProps: { value: _vm.value }
-    })
-  ])
+                },
+                [_vm._v("\n        Remove\n      ")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.file
+            ? _c(
+                "button",
+                {
+                  staticClass:
+                    "level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.deleteFile($event)
+                    }
+                  }
+                },
+                [_vm._v("\n        Delete\n      ")]
+              )
+            : _vm._e()
+        ])
+      ]),
+      _vm._v(" "),
+      _c("input", {
+        attrs: { type: "hidden", id: _vm.payload.id, name: _vm.payload.name },
+        domProps: { value: _vm.value }
+      })
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
