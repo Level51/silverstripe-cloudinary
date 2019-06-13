@@ -112,7 +112,8 @@ class UploadField extends FormField {
             'WIDTH',
             'HEIGHT',
             'FORMAT',
-            'CLOUDINARY_INFO'
+            'CLOUDINARY_INFO',
+            'ERR_MISSING_UPLOAD_PRESET'
         ];
 
         foreach ($keys as $key) {

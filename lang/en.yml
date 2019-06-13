@@ -15,3 +15,4 @@ en:
     HEIGHT: Height
     FORMAT: Format
     CLOUDINARY_INFO: Cloudinary Info
+    ERR_MISSING_UPLOAD_PRESET: '"Level51\Cloudinary\Cloudinary.upload_preset" config is required'

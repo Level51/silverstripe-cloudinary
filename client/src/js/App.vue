@@ -10,66 +10,75 @@
     @dragleave="isDragging = false"
     @dragend="isDragging = false"
     @drop.prevent="handleFileDrop">
+
     <div
-      v-if="file"
-      class="level51-cu-thumbnailContainer">
-      <img
-        class="level51-cu-thumbnail"
-        :src="file.thumbnailURL">
+      v-if="configError"
+      class="level51-cu-errorMessage">
+      {{ i18n('ERR_MISSING_UPLOAD_PRESET') }}
     </div>
 
-    <div>
+    <template v-else>
       <div
         v-if="file"
-        class="level51-cu-fileInfo">
-        <strong>{{ i18n('FILENAME') }}:</strong> {{ file.filename }}
-        <i
-          class="level51-cu-fileMetaInfo font-icon-white-question"
-          :title="fileMetaInfo"
-        />
-        <br>
-        <strong>{{ i18n('PUBLIC_ID') }}:</strong>
-        <a
-          :href="file.mediaLibraryLink"
-          target="_blank"
-          rel="nofollow noopener">
-          {{ file.publicID }}
-        </a>
+        class="level51-cu-thumbnailContainer">
+        <img
+          class="level51-cu-thumbnail"
+          :src="file.thumbnailURL">
       </div>
 
-      <div class="level51-cu-actions">
-        <button
-          class="level51-cu-uploadBtn btn btn-outline-primary font-icon-upload"
-          @click="openWidget">
-          <template v-if="file">
-            {{ i18n('CTA_UPLOAD_REPLACE') }}
-          </template>
-          <template v-else>
-            {{ i18n('CTA_UPLOAD') }}
-          </template>
-        </button>
-
-        <button
-          v-if="showRemove"
-          class="level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin"
-          @click.prevent="removeFile">
-          {{ i18n('CTA_REMOVE') }}
-        </button>
-
-        <button
+      <div>
+        <div
           v-if="file"
-          class="level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin"
-          @click.prevent="deleteFile">
-          {{ i18n('CTA_DELETE') }}
-        </button>
-      </div>
-    </div>
+          class="level51-cu-fileInfo">
+          <strong>{{ i18n('FILENAME') }}:</strong> {{ file.filename }}
+          <i
+            class="level51-cu-fileMetaInfo font-icon-white-question"
+            :title="fileMetaInfo"
+          />
+          <br>
+          <strong>{{ i18n('PUBLIC_ID') }}:</strong>
+          <a
+            :href="file.mediaLibraryLink"
+            target="_blank"
+            rel="nofollow noopener">
+            {{ file.publicID }}
+          </a>
+        </div>
 
-    <div
-      class="level51-cu-metaInfo"
-      :title="metaInfo">
-      {{ i18n('CLOUDINARY_INFO') }}
-    </div>
+        <div class="level51-cu-actions">
+          <button
+            class="level51-cu-uploadBtn btn btn-outline-primary font-icon-upload"
+            @click="openWidget">
+            <template v-if="file">
+              {{ i18n('CTA_UPLOAD_REPLACE') }}
+            </template>
+            <template v-else>
+              {{ i18n('CTA_UPLOAD') }}
+            </template>
+          </button>
+
+          <button
+            v-if="showRemove"
+            class="level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin"
+            @click.prevent="removeFile">
+            {{ i18n('CTA_REMOVE') }}
+          </button>
+
+          <button
+            v-if="file"
+            class="level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin"
+            @click.prevent="deleteFile">
+            {{ i18n('CTA_DELETE') }}
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="level51-cu-metaInfo"
+        :title="metaInfo">
+        {{ i18n('CLOUDINARY_INFO') }}
+      </div>
+    </template>
 
     <input
       type="hidden"
@@ -118,6 +127,9 @@ export default {
     },
     metaInfo() {
       return `${this.i18n('CLOUD_NAME')}: ${this.payload.cloudinaryOptions.cloudName}\n${this.i18n('DESTINATION_FOLDER')}: ${this.payload.cloudinaryOptions.folder}`;
+    },
+    configError() {
+      return !this.payload.cloudinaryOptions.uploadPreset;
     },
     fileMetaInfo() {
       return `${this.i18n('FORMAT')}: ${this.file.format}
@@ -245,6 +257,10 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
 
     .level51-cu-fileMetaInfo {
       cursor: help;
+    }
+
+    .level51-cu-errorMessage {
+      color: @color-error;
     }
 
     &.level51-cu-component--noFile {

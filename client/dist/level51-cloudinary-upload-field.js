@@ -2158,6 +2158,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2197,6 +2206,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     metaInfo: function metaInfo() {
       return "".concat(this.i18n('CLOUD_NAME'), ": ").concat(this.payload.cloudinaryOptions.cloudName, "\n").concat(this.i18n('DESTINATION_FOLDER'), ": ").concat(this.payload.cloudinaryOptions.folder);
+    },
+    configError: function configError() {
+      return !this.payload.cloudinaryOptions.uploadPreset;
     },
     fileMetaInfo: function fileMetaInfo() {
       return "".concat(this.i18n('FORMAT'), ": ").concat(this.file.format, "\n").concat(this.i18n('HEIGHT'), ": ").concat(this.file.height, "px\n").concat(this.i18n('WIDTH'), ": ").concat(this.file.width, "px\n").concat(this.i18n('SIZE'), ": ").concat(this.file.niceSize);
@@ -12558,126 +12570,153 @@ var render = function() {
       }
     },
     [
-      _vm.file
-        ? _c("div", { staticClass: "level51-cu-thumbnailContainer" }, [
-            _c("img", {
-              staticClass: "level51-cu-thumbnail",
-              attrs: { src: _vm.file.thumbnailURL }
-            })
+      _vm.configError
+        ? _c("div", { staticClass: "level51-cu-errorMessage" }, [
+            _vm._v(
+              "\n    " + _vm._s(_vm.i18n("ERR_MISSING_UPLOAD_PRESET")) + "\n  "
+            )
           ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", [
-        _vm.file
-          ? _c("div", { staticClass: "level51-cu-fileInfo" }, [
-              _c("strong", [_vm._v(_vm._s(_vm.i18n("FILENAME")) + ":")]),
-              _vm._v(" " + _vm._s(_vm.file.filename) + "\n      "),
-              _c("i", {
-                staticClass: "level51-cu-fileMetaInfo font-icon-white-question",
-                attrs: { title: _vm.fileMetaInfo }
-              }),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c("strong", [_vm._v(_vm._s(_vm.i18n("PUBLIC_ID")) + ":")]),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  attrs: {
-                    href: _vm.file.mediaLibraryLink,
-                    target: "_blank",
-                    rel: "nofollow noopener"
-                  }
-                },
-                [_vm._v("\n        " + _vm._s(_vm.file.publicID) + "\n      ")]
-              )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c("div", { staticClass: "level51-cu-actions" }, [
-          _c(
-            "button",
-            {
-              staticClass:
-                "level51-cu-uploadBtn btn btn-outline-primary font-icon-upload",
-              on: { click: _vm.openWidget }
-            },
-            [
+        : [
+            _vm.file
+              ? _c("div", { staticClass: "level51-cu-thumbnailContainer" }, [
+                  _c("img", {
+                    staticClass: "level51-cu-thumbnail",
+                    attrs: { src: _vm.file.thumbnailURL }
+                  })
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("div", [
               _vm.file
-                ? [
-                    _vm._v(
-                      "\n          " +
-                        _vm._s(_vm.i18n("CTA_UPLOAD_REPLACE")) +
-                        "\n        "
+                ? _c("div", { staticClass: "level51-cu-fileInfo" }, [
+                    _c("strong", [_vm._v(_vm._s(_vm.i18n("FILENAME")) + ":")]),
+                    _vm._v(" " + _vm._s(_vm.file.filename) + "\n        "),
+                    _c("i", {
+                      staticClass:
+                        "level51-cu-fileMetaInfo font-icon-white-question",
+                      attrs: { title: _vm.fileMetaInfo }
+                    }),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("strong", [_vm._v(_vm._s(_vm.i18n("PUBLIC_ID")) + ":")]),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        attrs: {
+                          href: _vm.file.mediaLibraryLink,
+                          target: "_blank",
+                          rel: "nofollow noopener"
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n          " +
+                            _vm._s(_vm.file.publicID) +
+                            "\n        "
+                        )
+                      ]
                     )
-                  ]
-                : [
-                    _vm._v(
-                      "\n          " +
-                        _vm._s(_vm.i18n("CTA_UPLOAD")) +
-                        "\n        "
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c("div", { staticClass: "level51-cu-actions" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "level51-cu-uploadBtn btn btn-outline-primary font-icon-upload",
+                    on: { click: _vm.openWidget }
+                  },
+                  [
+                    _vm.file
+                      ? [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(_vm.i18n("CTA_UPLOAD_REPLACE")) +
+                              "\n          "
+                          )
+                        ]
+                      : [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(_vm.i18n("CTA_UPLOAD")) +
+                              "\n          "
+                          )
+                        ]
+                  ],
+                  2
+                ),
+                _vm._v(" "),
+                _vm.showRemove
+                  ? _c(
+                      "button",
+                      {
+                        staticClass:
+                          "level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.removeFile($event)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n          " +
+                            _vm._s(_vm.i18n("CTA_REMOVE")) +
+                            "\n        "
+                        )
+                      ]
                     )
-                  ]
-            ],
-            2
-          ),
-          _vm._v(" "),
-          _vm.showRemove
-            ? _c(
-                "button",
-                {
-                  staticClass:
-                    "level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin",
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.removeFile($event)
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n        " + _vm._s(_vm.i18n("CTA_REMOVE")) + "\n      "
-                  )
-                ]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.file
-            ? _c(
-                "button",
-                {
-                  staticClass:
-                    "level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin",
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.deleteFile($event)
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n        " + _vm._s(_vm.i18n("CTA_DELETE")) + "\n      "
-                  )
-                ]
-              )
-            : _vm._e()
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "level51-cu-metaInfo", attrs: { title: _vm.metaInfo } },
-        [_vm._v("\n    " + _vm._s(_vm.i18n("CLOUDINARY_INFO")) + "\n  ")]
-      ),
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.file
+                  ? _c(
+                      "button",
+                      {
+                        staticClass:
+                          "level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.deleteFile($event)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n          " +
+                            _vm._s(_vm.i18n("CTA_DELETE")) +
+                            "\n        "
+                        )
+                      ]
+                    )
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "level51-cu-metaInfo",
+                attrs: { title: _vm.metaInfo }
+              },
+              [
+                _vm._v(
+                  "\n      " + _vm._s(_vm.i18n("CLOUDINARY_INFO")) + "\n    "
+                )
+              ]
+            )
+          ],
       _vm._v(" "),
       _c("input", {
         attrs: { type: "hidden", id: _vm.payload.id, name: _vm.payload.name },
         domProps: { value: _vm.value }
       })
-    ]
+    ],
+    2
   )
 }
 var staticRenderFns = []

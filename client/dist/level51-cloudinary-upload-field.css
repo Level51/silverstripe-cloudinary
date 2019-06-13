@@ -11,6 +11,9 @@
 .level51-cu-component .level51-cu-fileMetaInfo {
   cursor: help;
 }
+.level51-cu-component .level51-cu-errorMessage {
+  color: #c50022;
+}
 .level51-cu-component.level51-cu-component--noFile {
   justify-content: center;
 }
