@@ -25,11 +25,6 @@ class UploadField extends FormField {
     protected $extraClasses = ['cloudinaryupload'];
 
     /**
-     * @var bool Flag for displaying meta info (cloud and folder name) in the control.
-     */
-    public $showCloudName = true;
-
-    /**
      * Get the actual upload field.
      *
      * Basically just calls the parent method and requires some assets.
@@ -110,7 +105,14 @@ class UploadField extends FormField {
             'CTA_UPLOAD_REPLACE',
             'CTA_REMOVE',
             'FILENAME',
-            'PUBLIC_ID'
+            'PUBLIC_ID',
+            'CLOUD_NAME',
+            'DESTINATION_FOLDER',
+            'SIZE',
+            'WIDTH',
+            'HEIGHT',
+            'FORMAT',
+            'CLOUDINARY_INFO'
         ];
 
         foreach ($keys as $key) {

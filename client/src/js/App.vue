@@ -22,7 +22,12 @@
       <div
         v-if="file"
         class="level51-cu-fileInfo">
-        <strong>{{ i18n('FILENAME') }}:</strong> {{ file.filename }} |
+        <strong>{{ i18n('FILENAME') }}:</strong> {{ file.filename }}
+        <i
+          class="level51-cu-fileMetaInfo font-icon-white-question"
+          :title="fileMetaInfo"
+        />
+        <br>
         <strong>{{ i18n('PUBLIC_ID') }}:</strong>
         <a
           :href="file.mediaLibraryLink"
@@ -60,6 +65,12 @@
       </div>
     </div>
 
+    <div
+      class="level51-cu-metaInfo"
+      :title="metaInfo">
+      {{ i18n('CLOUDINARY_INFO') }}
+    </div>
+
     <input
       type="hidden"
       :id="payload.id"
@@ -71,7 +82,6 @@
 <script>
 import axios from 'axios';
 
-// TODO meta data (always visible || showCloudName = false)
 export default {
   props: {
     payload: {
@@ -105,6 +115,15 @@ export default {
     },
     showRemove() {
       return this.payload.options.showRemove && this.file;
+    },
+    metaInfo() {
+      return `${this.i18n('CLOUD_NAME')}: ${this.payload.cloudinaryOptions.cloudName}\n${this.i18n('DESTINATION_FOLDER')}: ${this.payload.cloudinaryOptions.folder}`;
+    },
+    fileMetaInfo() {
+      return `${this.i18n('FORMAT')}: ${this.file.format}
+${this.i18n('HEIGHT')}: ${this.file.height}px
+${this.i18n('WIDTH')}: ${this.file.width}px
+${this.i18n('SIZE')}: ${this.file.niceSize}`;
     }
   },
   methods: {
@@ -224,6 +243,10 @@ export default {
     align-items: center;
     transition: all 250ms ease-in-out;
 
+    .level51-cu-fileMetaInfo {
+      cursor: help;
+    }
+
     &.level51-cu-component--noFile {
       justify-content: center;
     }
@@ -240,6 +263,18 @@ export default {
 
     .level51-cu-fileInfo {
       margin-bottom: @space-2;
+    }
+
+    .level51-cu-metaInfo {
+      position: absolute;
+      right: 35px;
+      bottom: 10px;
+      opacity: .75;
+      font-size: 0.75rem;
+
+      &:hover {
+        cursor: help;
+      }
     }
   }
 </style>

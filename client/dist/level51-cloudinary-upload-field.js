@@ -2147,7 +2147,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
- // TODO meta data (always visible || showCloudName = false)
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2184,6 +2194,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     showRemove: function showRemove() {
       return this.payload.options.showRemove && this.file;
+    },
+    metaInfo: function metaInfo() {
+      return "".concat(this.i18n('CLOUD_NAME'), ": ").concat(this.payload.cloudinaryOptions.cloudName, "\n").concat(this.i18n('DESTINATION_FOLDER'), ": ").concat(this.payload.cloudinaryOptions.folder);
+    },
+    fileMetaInfo: function fileMetaInfo() {
+      return "".concat(this.i18n('FORMAT'), ": ").concat(this.file.format, "\n").concat(this.i18n('HEIGHT'), ": ").concat(this.file.height, "px\n").concat(this.i18n('WIDTH'), ": ").concat(this.file.width, "px\n").concat(this.i18n('SIZE'), ": ").concat(this.file.niceSize);
     }
   },
   methods: {
@@ -12555,7 +12571,14 @@ var render = function() {
         _vm.file
           ? _c("div", { staticClass: "level51-cu-fileInfo" }, [
               _c("strong", [_vm._v(_vm._s(_vm.i18n("FILENAME")) + ":")]),
-              _vm._v(" " + _vm._s(_vm.file.filename) + " |\n      "),
+              _vm._v(" " + _vm._s(_vm.file.filename) + "\n      "),
+              _c("i", {
+                staticClass: "level51-cu-fileMetaInfo font-icon-white-question",
+                attrs: { title: _vm.fileMetaInfo }
+              }),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
               _c("strong", [_vm._v(_vm._s(_vm.i18n("PUBLIC_ID")) + ":")]),
               _vm._v(" "),
               _c(
@@ -12643,6 +12666,12 @@ var render = function() {
             : _vm._e()
         ])
       ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "level51-cu-metaInfo", attrs: { title: _vm.metaInfo } },
+        [_vm._v("\n    " + _vm._s(_vm.i18n("CLOUDINARY_INFO")) + "\n  ")]
+      ),
       _vm._v(" "),
       _c("input", {
         attrs: { type: "hidden", id: _vm.payload.id, name: _vm.payload.name },

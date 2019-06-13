@@ -10,3 +10,8 @@ en:
     READ_ONLY_NO_IMAGE: No Image
     FILENAME: Name
     PUBLIC_ID: Public ID
+    SIZE: Size
+    WIDTH: Width
+    HEIGHT: Height
+    FORMAT: Format
+    CLOUDINARY_INFO: Cloudinary Info

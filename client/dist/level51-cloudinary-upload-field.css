@@ -8,6 +8,9 @@
   align-items: center;
   transition: all 250ms ease-in-out;
 }
+.level51-cu-component .level51-cu-fileMetaInfo {
+  cursor: help;
+}
 .level51-cu-component.level51-cu-component--noFile {
   justify-content: center;
 }
@@ -21,6 +24,16 @@
 }
 .level51-cu-component .level51-cu-fileInfo {
   margin-bottom: 10px;
+}
+.level51-cu-component .level51-cu-metaInfo {
+  position: absolute;
+  right: 35px;
+  bottom: 10px;
+  opacity: 0.75;
+  font-size: 0.75rem;
+}
+.level51-cu-component .level51-cu-metaInfo:hover {
+  cursor: help;
 }
 
 
