@@ -1,4 +1,4 @@
-## [Unreleased]
+## [1.2.0] - 2019-06-13
 ### Added
 - Drag & drop support while the widget is closed
 
