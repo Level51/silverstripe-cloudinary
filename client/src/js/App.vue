@@ -173,9 +173,11 @@ export default {
         }
       );
     },
-    openWidget(file = null) {
-      if (file) this.widget.open(null, { files: [file] });
-      else this.widget.open();
+    openWidget() {
+      this.widget.open();
+    },
+    openWidgetWithFile(file) {
+      this.widget.open(null, { files: [file] });
     },
     removeFile() {
       this.file = null;
@@ -197,7 +199,7 @@ export default {
       this.isDragging = false;
       event.preventDefault();
 
-      this.openWidget(event.dataTransfer.files[0]);
+      this.openWidgetWithFile(event.dataTransfer.files[0]);
 
       return false;
     }

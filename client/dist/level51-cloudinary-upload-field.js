@@ -2239,10 +2239,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     openWidget: function openWidget() {
-      var file = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      if (file) this.widget.open(null, {
+      this.widget.open();
+    },
+    openWidgetWithFile: function openWidgetWithFile(file) {
+      this.widget.open(null, {
         files: [file]
-      });else this.widget.open();
+      });
     },
     removeFile: function removeFile() {
       this.file = null;
@@ -2262,7 +2264,7 @@ __webpack_require__.r(__webpack_exports__);
     handleFileDrop: function handleFileDrop(event) {
       this.isDragging = false;
       event.preventDefault();
-      this.openWidget(event.dataTransfer.files[0]);
+      this.openWidgetWithFile(event.dataTransfer.files[0]);
       return false;
     }
   }
