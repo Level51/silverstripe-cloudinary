@@ -1,7 +1,7 @@
 {
   "name": "level51/silverstripe-cloudinary",
-  "version": "1.1.4",
-  "time": "2019-06-12",
+  "version": "1.2.0",
+  "time": "2019-06-13",
   "description": "Cloudinary image handling & upload field for SilverStripe",
   "keywords": [
     "silverstripe",
@@ -17,6 +17,7 @@
   ],
   "require": {
     "php": ">=7.0",
+    "ext-json": "*",
     "silverstripe/framework": "^4.3",
     "cloudinary/cloudinary_php": "^1.9",
     "nesbot/carbon": "^1.34"

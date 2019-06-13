@@ -5,7 +5,7 @@
     <div class="form__field-holder<% if not $Title %> form__field-holder--no-label<% end_if %>">
         <% if $isReadonly %>
             <% if $File %>
-                <img class="cloudinary-upload-field-thumbnail" src="$File.Thumbnail">
+                <img class="cloudinary-upload-field-thumbnail" src="$File.ThumbnailURL">
             <% else %>
                 <%t Level51\Cloudinary\Cloudinary.READ_ONLY_NO_IMAGE %>
             <% end_if %>

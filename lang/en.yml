@@ -4,6 +4,15 @@ en:
     CTA_DELETE: Delete
     CTA_REMOVE: Remove
     CTA_UPLOAD: Upload
+    CTA_UPLOAD_REPLACE: Upload new
     DESTINATION_FOLDER: Destination folder
     ERR_DOWNLOAD_NO_PUBLIC_ID: '"public_id" not set for Cloudinary image {ImageID}'
     READ_ONLY_NO_IMAGE: No Image
+    FILENAME: Name
+    PUBLIC_ID: Public ID
+    SIZE: Size
+    WIDTH: Width
+    HEIGHT: Height
+    FORMAT: Format
+    CLOUDINARY_INFO: Cloudinary Info
+    ERR_MISSING_UPLOAD_PRESET: '"Level51\Cloudinary\Cloudinary.upload_preset" config is required'

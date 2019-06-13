@@ -404,8 +404,8 @@ class Image extends DataObject {
     /**
      * Crop to custom coordinates/gravity if available, then scale/crop to the exact dimensions.
      *
-     * @param int $width
-     * @param int $height
+     * @param int  $width
+     * @param int  $height
      * @param bool $round Return a rounded image
      *
      * @return $this
@@ -513,6 +513,33 @@ class Image extends DataObject {
 
     public function getTag() {
         return '<img src="' . $this->Link() . '" alt="' . $this->Filename . '" />';
+    }
+
+    /**
+     * Get a flat version for template usage.
+     *
+     * @return array
+     */
+    public function flatten() {
+        $payload = [
+            'id'               => $this->ID,
+            'publicID'         => $this->PublicID,
+            'version'          => $this->Version,
+            'format'           => $this->Format,
+            'etag'             => $this->eTag,
+            'url'              => $this->URL,
+            'filename'         => $this->Filename,
+            'thumbnailURL'     => $this->ThumbnailURL,
+            'size'             => $this->Size,
+            'niceSize'         => $this->getNiceSize(),
+            'width'            => $this->Width,
+            'height'           => $this->Height,
+            'mediaLibraryLink' => $this->getMediaLibraryLink()
+        ];
+
+        $this->extend('updateFlatten', $payload);
+
+        return $payload;
     }
 
     /**
