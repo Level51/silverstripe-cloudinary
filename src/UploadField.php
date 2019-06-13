@@ -88,12 +88,36 @@ class UploadField extends FormField {
                 'showRemove' => $this->showRemove()
             ],
             'file'              => ($file = $this->getFile()) ? $file->flatten() : null,
+            'i18n'              => $this->getFrontendI18NPayload()
         ];
 
         if (self::$use_signed)
             $payload['cloudinaryOptions']['apiKey'] = Service::config()->get('api_key');
 
         return json_encode($payload);
+    }
+
+    /**
+     * Prepare labels for the vue component.
+     *
+     * @return array
+     */
+    private function getFrontendI18NPayload() {
+        $payload = [];
+        $keys = [
+            'CTA_DELETE',
+            'CTA_UPLOAD',
+            'CTA_UPLOAD_REPLACE',
+            'CTA_REMOVE',
+            'FILENAME',
+            'PUBLIC_ID'
+        ];
+
+        foreach ($keys as $key) {
+            $payload[$key] = _t('Level51\Cloudinary\Cloudinary.' . $key);
+        }
+
+        return $payload;
     }
 
     /**

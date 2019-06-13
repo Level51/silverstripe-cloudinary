@@ -4,6 +4,9 @@ de:
     CTA_DELETE: Löschen
     CTA_REMOVE: Entfernen
     CTA_UPLOAD: Upload
+    CTA_UPLOAD_REPLACE: Neuer Upload
     DESTINATION_FOLDER: Zielordner
     ERR_DOWNLOAD_NO_PUBLIC_ID: 'Das Bild {ImageID} hat keine "public_id"'
     READ_ONLY_NO_IMAGE: Kein Bild
+    FILENAME: Name
+    PUBLIC_ID: Public ID

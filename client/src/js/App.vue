@@ -1,7 +1,10 @@
 <template>
   <div
     class="level51-cu-component"
-    :class="{'level51-cu-component--dragging': isDragging}"
+    :class="[
+      {'level51-cu-component--dragging': isDragging},
+      {'level51-cu-component--noFile': !file}
+    ]"
     @dragover="isDragging = true"
     @dragenter="isDragging = true"
     @dragleave="isDragging = false"
@@ -19,8 +22,8 @@
       <div
         v-if="file"
         class="level51-cu-fileInfo">
-        <strong>Name:</strong> {{ file.filename }} |
-        <strong>Public ID:</strong>
+        <strong>{{ i18n('FILENAME') }}:</strong> {{ file.filename }} |
+        <strong>{{ i18n('PUBLIC_ID') }}:</strong>
         <a
           :href="file.mediaLibraryLink"
           target="_blank"
@@ -34,10 +37,10 @@
           class="level51-cu-uploadBtn btn btn-outline-primary font-icon-upload"
           @click="openWidget">
           <template v-if="file">
-            Upload new
+            {{ i18n('CTA_UPLOAD_REPLACE') }}
           </template>
           <template v-else>
-            Upload image
+            {{ i18n('CTA_UPLOAD') }}
           </template>
         </button>
 
@@ -45,14 +48,14 @@
           v-if="showRemove"
           class="level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin"
           @click.prevent="removeFile">
-          Remove
+          {{ i18n('CTA_REMOVE') }}
         </button>
 
         <button
           v-if="file"
           class="level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin"
           @click.prevent="deleteFile">
-          Delete
+          {{ i18n('CTA_DELETE') }}
         </button>
       </div>
     </div>
@@ -68,8 +71,6 @@
 <script>
 import axios from 'axios';
 
-// TODO localization
-// TODO styling
 // TODO meta data (always visible || showCloudName = false)
 export default {
   props: {
@@ -162,7 +163,6 @@ export default {
         options,
         (error, result) => {
           if (!error && result && result.event === 'success') {
-            console.log('cl success callback, result', result);
             axios.post(
               `${location.origin}/admin/cloudinary/onAfterUpload`,
               result.info
@@ -202,6 +202,10 @@ export default {
       this.openWidgetWithFile(event.dataTransfer.files[0]);
 
       return false;
+    },
+    i18n(label) {
+      const { i18n } = this.payload;
+      return i18n.hasOwnProperty(label) ? i18n[label] : label;
     }
   }
 };
@@ -219,6 +223,10 @@ export default {
     display: flex;
     align-items: center;
     transition: all 250ms ease-in-out;
+
+    &.level51-cu-component--noFile {
+      justify-content: center;
+    }
 
     &.level51-cu-component--dragging {
       border-color: @color-success;

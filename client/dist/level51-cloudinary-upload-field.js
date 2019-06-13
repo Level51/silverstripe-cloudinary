@@ -2144,9 +2144,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
- // TODO localization
-// TODO styling
-// TODO meta data (always visible || showCloudName = false)
+//
+//
+//
+ // TODO meta data (always visible || showCloudName = false)
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2231,7 +2232,6 @@ __webpack_require__.r(__webpack_exports__);
 
       this.widget = cloudinary.createUploadWidget(options, function (error, result) {
         if (!error && result && result.event === 'success') {
-          console.log('cl success callback, result', result);
           axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("".concat(location.origin, "/admin/cloudinary/onAfterUpload"), result.info).then(function (response) {
             _this2.file = response.data;
           });
@@ -2266,6 +2266,10 @@ __webpack_require__.r(__webpack_exports__);
       event.preventDefault();
       this.openWidgetWithFile(event.dataTransfer.files[0]);
       return false;
+    },
+    i18n: function i18n(label) {
+      var i18n = this.payload.i18n;
+      return i18n.hasOwnProperty(label) ? i18n[label] : label;
     }
   }
 });
@@ -12514,7 +12518,10 @@ var render = function() {
     "div",
     {
       staticClass: "level51-cu-component",
-      class: { "level51-cu-component--dragging": _vm.isDragging },
+      class: [
+        { "level51-cu-component--dragging": _vm.isDragging },
+        { "level51-cu-component--noFile": !_vm.file }
+      ],
       on: {
         dragover: function($event) {
           _vm.isDragging = true
@@ -12547,9 +12554,9 @@ var render = function() {
       _c("div", [
         _vm.file
           ? _c("div", { staticClass: "level51-cu-fileInfo" }, [
-              _c("strong", [_vm._v("Name:")]),
+              _c("strong", [_vm._v(_vm._s(_vm.i18n("FILENAME")) + ":")]),
               _vm._v(" " + _vm._s(_vm.file.filename) + " |\n      "),
-              _c("strong", [_vm._v("Public ID:")]),
+              _c("strong", [_vm._v(_vm._s(_vm.i18n("PUBLIC_ID")) + ":")]),
               _vm._v(" "),
               _c(
                 "a",
@@ -12575,8 +12582,20 @@ var render = function() {
             },
             [
               _vm.file
-                ? [_vm._v("\n          Upload new\n        ")]
-                : [_vm._v("\n          Upload image\n        ")]
+                ? [
+                    _vm._v(
+                      "\n          " +
+                        _vm._s(_vm.i18n("CTA_UPLOAD_REPLACE")) +
+                        "\n        "
+                    )
+                  ]
+                : [
+                    _vm._v(
+                      "\n          " +
+                        _vm._s(_vm.i18n("CTA_UPLOAD")) +
+                        "\n        "
+                    )
+                  ]
             ],
             2
           ),
@@ -12594,7 +12613,11 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n        Remove\n      ")]
+                [
+                  _vm._v(
+                    "\n        " + _vm._s(_vm.i18n("CTA_REMOVE")) + "\n      "
+                  )
+                ]
               )
             : _vm._e(),
           _vm._v(" "),
@@ -12611,7 +12634,11 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n        Delete\n      ")]
+                [
+                  _vm._v(
+                    "\n        " + _vm._s(_vm.i18n("CTA_DELETE")) + "\n      "
+                  )
+                ]
               )
             : _vm._e()
         ])
