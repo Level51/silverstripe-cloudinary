@@ -1,6 +1,10 @@
 ## [Unreleased]
+### Added
+- Drag & drop support while the widget is closed
+
 ### Changed
 - Full client / FE refactor using vue.js component instead of jQuery/entwine
+- New upload widget version (2.0)
 
 ## [1.1.4] - 2019-06-12
 ### Added
