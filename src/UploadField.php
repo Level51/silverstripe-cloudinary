@@ -25,11 +25,6 @@ class UploadField extends FormField {
     protected $extraClasses = ['cloudinaryupload'];
 
     /**
-     * @var bool Flag for displaying meta info (cloud and folder name) in the control.
-     */
-    public $showCloudName = true;
-
-    /**
      * Get the actual upload field.
      *
      * Basically just calls the parent method and requires some assets.
@@ -39,8 +34,8 @@ class UploadField extends FormField {
      * @return string
      */
     public function Field($properties = array()) {
-        Requirements::javascript('level51/silverstripe-cloudinary: client/dist/cloudinary-upload-field.js');
-        Requirements::css('level51/silverstripe-cloudinary: client/dist/cloudinary-upload-field.css');
+        Requirements::javascript('level51/silverstripe-cloudinary: client/dist/level51-cloudinary-upload-field.js');
+        Requirements::css('level51/silverstripe-cloudinary: client/dist/level51-cloudinary-upload-field.css');
 
         return parent::Field($properties);
     }
@@ -67,45 +62,75 @@ class UploadField extends FormField {
     }
 
     /**
-     * Get the options passed to the FE via the data-options attribute on the container div.
+     * Get the frontend payload passed to the vue component.
      *
      * @return string
      */
-    public function getOptions() {
-        $options = [
-            'name'                  => $this->getName(),
-            'cloud_name'            => $this->getCloudName(),
-            'upload_preset'         => Service::config()->get('upload_preset'),
-            'theme'                 => Service::config()->get('theme'),
-            'folder'                => $this->getFolder(),
-            'cropping'              => $this->cropping,
-            'cropping_aspect_ratio' => $this->cropping_aspect_ratio,
-            'use_signed'            => Service::config()->get('use_signed')
+    public function getPayload() {
+        $payload = [
+            'id'                => $this->ID(),
+            'name'              => $this->getName(),
+            'cloudinaryOptions' => [
+                'cloudName'           => $this->getCloudName(),
+                'uploadPreset'        => Service::config()->get('upload_preset'),
+                'theme'               => Service::config()->get('theme'),
+                'folder'              => $this->getFolder(),
+                'cropping'            => $this->cropping,
+                'croppingAspectRatio' => $this->cropping_aspect_ratio,
+                'useSigned'           => Service::config()->get('use_signed'),
+            ],
+            'options'           => [
+                'showRemove' => $this->showRemove()
+            ],
+            'file'              => ($file = $this->getFile()) ? $file->flatten() : null,
+            'i18n'              => $this->getFrontendI18NPayload()
         ];
 
         if (self::$use_signed)
-            $options['api_key'] = Service::config()->get('api_key');
+            $payload['cloudinaryOptions']['apiKey'] = Service::config()->get('api_key');
 
-        return Convert::array2json($options);
+        return json_encode($payload);
     }
 
     /**
-     * Get some information about the linked file if there is any.
+     * Prepare labels for the vue component.
      *
-     * @return null|ArrayData
-     * @throws \Exception
+     * @return array
+     */
+    private function getFrontendI18NPayload() {
+        $payload = [];
+        $keys = [
+            'CTA_DELETE',
+            'CTA_UPLOAD',
+            'CTA_UPLOAD_REPLACE',
+            'CTA_REMOVE',
+            'FILENAME',
+            'PUBLIC_ID',
+            'CLOUD_NAME',
+            'DESTINATION_FOLDER',
+            'SIZE',
+            'WIDTH',
+            'HEIGHT',
+            'FORMAT',
+            'CLOUDINARY_INFO',
+            'ERR_MISSING_UPLOAD_PRESET'
+        ];
+
+        foreach ($keys as $key) {
+            $payload[$key] = _t('Level51\Cloudinary\Cloudinary.' . $key);
+        }
+
+        return $payload;
+    }
+
+    /**
+     * Get the cloudinary image record according to the value if set.
+     *
+     * @return \SilverStripe\ORM\DataObject|Image|null
      */
     public function getFile() {
-        if ($this->Value()) {
-            if ($file = Image::get()->byID($this->Value()))
-                return ArrayData::create([
-                    'Thumbnail'        => $file->ThumbnailURL,
-                    'ID'               => $file->ID,
-                    'Filename'         => $file->Filename,
-                    'PublicID'         => $file->PublicID,
-                    'MediaLibraryLink' => $file->getMediaLibraryLink()
-                ]);
-        }
+        if ($this->Value())
+            return Image::get()->byID($this->Value());
 
         return null;
     }
