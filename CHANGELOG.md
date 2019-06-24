@@ -1,3 +1,7 @@
+## [Unreleased]
+### Fixed
+- Check if the image record still exists before trying to call "delete" again
+
 ## [1.2.0] - 2019-06-13
 ### Added
 - Drag & drop support while the widget is closed
