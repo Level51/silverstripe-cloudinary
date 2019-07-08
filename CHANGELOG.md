@@ -1,4 +1,4 @@
-## [Unreleased]
+## [1.2.1] - 2019-07-08
 ### Fixed
 - Check if the image record still exists before trying to call "delete" again
 
