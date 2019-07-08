@@ -86,9 +86,13 @@ class UploadController extends Controller {
         if (!$body || empty($body) || !isset($body['id']))
             return false;
 
-        Image::get()->byID($body['id'])->delete();
+        if ($image = Image::get()->byID($body['id'])) {
+            $image->delete();
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 
     /**
