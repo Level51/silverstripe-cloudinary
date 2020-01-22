@@ -129,7 +129,8 @@ export default {
       return `${this.i18n('CLOUD_NAME')}: ${this.payload.cloudinaryOptions.cloudName}\n${this.i18n('DESTINATION_FOLDER')}: ${this.payload.cloudinaryOptions.folder}`;
     },
     configError() {
-      return !this.payload.cloudinaryOptions.uploadPreset;
+      return (!this.payload.cloudinaryOptions.useSigned // unsigned
+        && !this.payload.cloudinaryOptions.uploadPreset === ''); // preset not empty.
     },
     fileMetaInfo() {
       return `${this.i18n('FORMAT')}: ${this.file.format}
