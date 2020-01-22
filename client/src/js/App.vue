@@ -159,7 +159,7 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
 
         theme: this.payload.cloudinaryOptions.theme,
 
-        clientAllowedFormats: ['png', 'gif', 'jpeg'],
+        clientAllowedFormats: this.payload.clientAllowedFormats,
         // maxFileSize: 1500000, Number of bytes, no client side limit per default
         // maxImageHeight: 2000 // Client-isde scale down
         // maxImageWidth: 2000  // -- "" --

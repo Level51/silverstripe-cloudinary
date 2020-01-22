@@ -7,7 +7,17 @@ SilverStripe\Admin\LeftAndMain:
 Level51\Cloudinary\Cloudinary:
   theme: 'white'
   use_signed: true
+
+  # If this is not explicitly set, upload fails due to a null upload preset
+  upload_preset: ''
+
   show_remove: false
   image_type: 'private'
   use_custom_gravity: true
   root_folder: ''
+  clientAllowedFormats:
+    - gif
+    - png
+    - jpg
+    - jpeg
+    - svg
