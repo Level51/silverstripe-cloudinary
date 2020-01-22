@@ -3,7 +3,11 @@
 namespace Level51\Cloudinary;
 
 use SilverStripe\Control\Controller;
+use SilverStripe\Core\Convert;
+use SilverStripe\Forms\FileHandleField;
 use SilverStripe\Forms\FormField;
+use SilverStripe\i18n\i18n;
+use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 
 /**
@@ -84,6 +88,7 @@ class UploadField extends FormField {
             'i18n'              => $this->getFrontendI18NPayload()
         ];
 
+
         if (self::$use_signed)
             $payload['cloudinaryOptions']['apiKey'] = Service::config()->get('api_key');
 
@@ -115,7 +120,7 @@ class UploadField extends FormField {
         ];
 
         foreach ($keys as $key) {
-            $payload[$key] = _t('Level51\Cloudinary\Cloudinary.' . $key);
+            $payload[$key] = _t('Level51\Cloudinary\Cloudinary.' . $key, $key);
         }
 
         return $payload;
@@ -172,6 +177,25 @@ class UploadField extends FormField {
         $this->folder = $folder;
 
         return $this;
+    }
+
+    /**
+     * Change the folder to save into.
+     *
+     * Ensure to set the "Auto-create folders" options in https://cloudinary.com/console/settings/upload
+     * so folders are actually created.
+     *
+     * This complies with SilverStripe\Forms\FileHandleField interface, meaning existing calls to setFolderName will
+     * not break.
+     *
+     * @param string $folder The folder or path
+     *
+     * @return $this
+     *
+     */
+    public function setFolderName($folder)
+    {
+        $this->setFolder($folder);
     }
 
     /**
