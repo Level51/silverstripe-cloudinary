@@ -89,9 +89,9 @@
 </template>
 
 <script>
-import axios from 'axios';
+  import axios from 'axios';
 
-export default {
+  export default {
   props: {
     payload: {
       type: Object,
@@ -178,7 +178,6 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
        */
       if (this.payload.cloudinaryOptions.useSigned) {
         options.apiKey = this.payload.cloudinaryOptions.apiKey;
-
         options.uploadSignature = (callback, paramsToSign) => {
           axios.get(
             `${location.origin}/admin/cloudinary/generateSignature`,
