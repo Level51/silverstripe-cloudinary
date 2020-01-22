@@ -3,9 +3,7 @@
 namespace Level51\Cloudinary;
 
 use SilverStripe\Control\Controller;
-use SilverStripe\Core\Convert;
 use SilverStripe\Forms\FormField;
-use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 
 /**
@@ -129,8 +127,9 @@ class UploadField extends FormField {
      * @return \SilverStripe\ORM\DataObject|Image|null
      */
     public function getFile() {
-        if ($this->Value())
-            return Image::get()->byID($this->Value());
+        if ($this->Value()->ID) {
+            return Image::get()->byID($this->Value()->ID);
+        }
 
         return null;
     }
