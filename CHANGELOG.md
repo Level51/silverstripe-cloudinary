@@ -1,3 +1,15 @@
+## [1.3.0] - 2020-02-13
+### Added
+- Missing string for DE
+- Setting for allowed file extensions
+
+### Changed
+- Implement SilverStripe\Forms\FileHandleField interface, deprecated old method names
+- Improve getFile method to work with fields with or without ID suffix
+
+### Fixed
+- Signed upload requests without upload_preset
+
 ## [1.2.1] - 2019-07-08
 ### Fixed
 - Check if the image record still exists before trying to call "delete" again
