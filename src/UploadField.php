@@ -133,8 +133,12 @@ class UploadField extends FormField implements FileHandleField {
      * @return \SilverStripe\ORM\DataObject|Image|null
      */
     public function getFile() {
-        if ($this->Value())
-            return Image::get()->byID($this->Value());
+        $value = $this->Value();
+
+        if ($value) {
+            if ($value instanceof Image && $value->exists()) return $value;
+            else if (is_int($value)) return Image::get()->byID($value);
+        }
 
         return null;
     }
