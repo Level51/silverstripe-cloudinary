@@ -4,7 +4,6 @@ namespace Level51\Cloudinary;
 
 use Exception;
 use SilverStripe\Control\Controller;
-use SilverStripe\Core\Convert;
 
 /**
  * Controller for Cloudinary upload/image specific admin actions.

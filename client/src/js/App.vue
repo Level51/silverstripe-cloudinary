@@ -10,7 +10,6 @@
     @dragleave="isDragging = false"
     @dragend="isDragging = false"
     @drop.prevent="handleFileDrop">
-
     <div
       v-if="configError"
       class="level51-cu-errorMessage">
