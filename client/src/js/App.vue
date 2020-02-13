@@ -128,7 +128,8 @@ export default {
       return `${this.i18n('CLOUD_NAME')}: ${this.payload.cloudinaryOptions.cloudName}\n${this.i18n('DESTINATION_FOLDER')}: ${this.payload.cloudinaryOptions.folder}`;
     },
     configError() {
-      return !this.payload.cloudinaryOptions.uploadPreset;
+      return !this.payload.cloudinaryOptions.uploadPreset
+        && !this.payload.cloudinaryOptions.useSigned;
     },
     fileMetaInfo() {
       return `${this.i18n('FORMAT')}: ${this.file.format}
@@ -142,9 +143,6 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
       // Define basic options
       const options = {
         cloudName: this.payload.cloudinaryOptions.cloudName,
-        // TODO uploadPreset is a required option - ensure that
-        uploadPreset: this.payload.cloudinaryOptions.uploadPreset,
-
         sources: ['local'],
         multiple: false,
         // maxFiles: 10, only relevant if multiple uploads are enabled
@@ -166,6 +164,11 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
 
         // TODO check useful additional options
       };
+
+      // Set upload preset
+      if (this.payload.cloudinaryOptions.uploadPreset) {
+        options.uploadPreset = this.payload.cloudinaryOptions.uploadPreset;
+      }
 
       // Limit allowed file formats
       if (this.payload.allowedExtensions) {

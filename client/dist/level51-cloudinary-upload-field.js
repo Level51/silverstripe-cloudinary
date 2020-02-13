@@ -2277,7 +2277,7 @@ __webpack_require__.r(__webpack_exports__);
       return "".concat(this.i18n('CLOUD_NAME'), ": ").concat(this.payload.cloudinaryOptions.cloudName, "\n").concat(this.i18n('DESTINATION_FOLDER'), ": ").concat(this.payload.cloudinaryOptions.folder);
     },
     configError: function configError() {
-      return !this.payload.cloudinaryOptions.uploadPreset;
+      return !this.payload.cloudinaryOptions.uploadPreset && !this.payload.cloudinaryOptions.useSigned;
     },
     fileMetaInfo: function fileMetaInfo() {
       return "".concat(this.i18n('FORMAT'), ": ").concat(this.file.format, "\n").concat(this.i18n('HEIGHT'), ": ").concat(this.file.height, "px\n").concat(this.i18n('WIDTH'), ": ").concat(this.file.width, "px\n").concat(this.i18n('SIZE'), ": ").concat(this.file.niceSize);
@@ -2290,8 +2290,6 @@ __webpack_require__.r(__webpack_exports__);
       // Define basic options
       var options = {
         cloudName: this.payload.cloudinaryOptions.cloudName,
-        // TODO uploadPreset is a required option - ensure that
-        uploadPreset: this.payload.cloudinaryOptions.uploadPreset,
         sources: ['local'],
         multiple: false,
         // maxFiles: 10, only relevant if multiple uploads are enabled
@@ -2307,7 +2305,12 @@ __webpack_require__.r(__webpack_exports__);
         showAdvancedOptions: false // language: en // see https://cloudinary.com/documentation/upload_widget#localization
         // TODO check useful additional options
 
-      }; // Limit allowed file formats
+      }; // Set upload preset
+
+      if (this.payload.cloudinaryOptions.uploadPreset) {
+        options.uploadPreset = this.payload.cloudinaryOptions.uploadPreset;
+      } // Limit allowed file formats
+
 
       if (this.payload.allowedExtensions) {
         options.clientAllowedFormats = this.payload.allowedExtensions;
