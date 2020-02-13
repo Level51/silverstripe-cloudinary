@@ -26,6 +26,10 @@ Level51\Cloudinary\Cloudinary:
   # Whether to append the g_custom option or not
   use_custom_gravity: true
   
+  # Allowed file extensions, optional, defaults to ['png', 'gif', 'jpeg']
+  # Note that the extensions can also be limited per instance using `setAllowedExtensions`
+  allowed_extensions: ['png', 'gif', 'jpeg']
+  
 ```
 
 ### Features

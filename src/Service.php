@@ -3,7 +3,7 @@
 namespace Level51\Cloudinary;
 
 use Cloudinary;
-use \Cloudinary\Uploader as API;
+use Cloudinary\Uploader as API;
 use SilverStripe\Core\Config\Config;
 
 /**

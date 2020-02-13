@@ -10,7 +10,6 @@
     @dragleave="isDragging = false"
     @dragend="isDragging = false"
     @drop.prevent="handleFileDrop">
-
     <div
       v-if="configError"
       class="level51-cu-errorMessage">
@@ -129,7 +128,8 @@ export default {
       return `${this.i18n('CLOUD_NAME')}: ${this.payload.cloudinaryOptions.cloudName}\n${this.i18n('DESTINATION_FOLDER')}: ${this.payload.cloudinaryOptions.folder}`;
     },
     configError() {
-      return !this.payload.cloudinaryOptions.uploadPreset;
+      return !this.payload.cloudinaryOptions.uploadPreset
+        && !this.payload.cloudinaryOptions.useSigned;
     },
     fileMetaInfo() {
       return `${this.i18n('FORMAT')}: ${this.file.format}
@@ -143,9 +143,6 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
       // Define basic options
       const options = {
         cloudName: this.payload.cloudinaryOptions.cloudName,
-        // TODO uploadPreset is a required option - ensure that
-        uploadPreset: this.payload.cloudinaryOptions.uploadPreset,
-
         sources: ['local'],
         multiple: false,
         // maxFiles: 10, only relevant if multiple uploads are enabled
@@ -157,8 +154,6 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
         resourceType: 'image',
 
         theme: this.payload.cloudinaryOptions.theme,
-
-        clientAllowedFormats: ['png', 'gif', 'jpeg'],
         // maxFileSize: 1500000, Number of bytes, no client side limit per default
         // maxImageHeight: 2000 // Client-isde scale down
         // maxImageWidth: 2000  // -- "" --
@@ -169,6 +164,16 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
 
         // TODO check useful additional options
       };
+
+      // Set upload preset
+      if (this.payload.cloudinaryOptions.uploadPreset) {
+        options.uploadPreset = this.payload.cloudinaryOptions.uploadPreset;
+      }
+
+      // Limit allowed file formats
+      if (this.payload.allowedExtensions) {
+        options.clientAllowedFormats = this.payload.allowedExtensions;
+      }
 
       /**
        * Check for signed uploads, add the apiKey and a function to generate the signature
