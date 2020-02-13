@@ -2,10 +2,11 @@
 
 namespace Level51\Cloudinary;
 
+use Exception;
+use SilverStripe\Assets\File;
 use SilverStripe\Control\Controller;
-use SilverStripe\Core\Convert;
+use SilverStripe\Forms\FileHandleField;
 use SilverStripe\Forms\FormField;
-use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 
 /**
@@ -13,7 +14,7 @@ use SilverStripe\View\Requirements;
  *
  * @see https://cloudinary.com/documentation/upload_widget#upload_widget_options for available options
  */
-class UploadField extends FormField {
+class UploadField extends FormField implements FileHandleField {
 
     private $folder = '';
     private $cropping = 'server';
@@ -23,6 +24,8 @@ class UploadField extends FormField {
     protected $fieldHolderTemplate = 'UploadField_holder';
 
     protected $extraClasses = ['cloudinaryupload'];
+
+    public $allowedExtensions = [];
 
     /**
      * Get the actual upload field.
@@ -78,6 +81,7 @@ class UploadField extends FormField {
                 'cropping'            => $this->cropping,
                 'croppingAspectRatio' => $this->cropping_aspect_ratio,
                 'useSigned'           => Service::config()->get('use_signed'),
+                'allowedExtensions'   => $this->getAllowedExtensions()
             ],
             'options'           => [
                 'showRemove' => $this->showRemove()
@@ -139,8 +143,19 @@ class UploadField extends FormField {
      * Get the upload folder/path.
      *
      * @return string
+     *
+     * @deprecated 1.3.0 use getFolderName instead
      */
     public function getFolder() {
+        return $this->getFolderName();
+    }
+
+    /**
+     * Get the upload folder/path.
+     *
+     * @return string
+     */
+    public function getFolderName() {
         $root = Service::config()->get('root_folder');
 
         if (!$this->folder)
@@ -159,6 +174,27 @@ class UploadField extends FormField {
     }
 
     /**
+     * Get allowed file extensions.
+     *
+     * @return array|null
+     */
+    public function getAllowedExtensions() {
+        // Check limitations per field instance
+        if ($this->allowedExtensions && is_array($this->allowedExtensions) && count($this->allowedExtensions) > 0) {
+            return $this->allowedExtensions;
+        }
+
+        // Check for global setting via config API
+        if (($globalSetting = Service::config()->get('allowed_extensions')) &&
+            is_array($globalSetting) &&
+            count($globalSetting) > 0) {
+            return $globalSetting;
+        }
+
+        return null;
+    }
+
+    /**
      * Change the folder to save into.
      *
      * Ensure to set the "Auto-create folders" options in https://cloudinary.com/console/settings/upload
@@ -168,8 +204,24 @@ class UploadField extends FormField {
      *
      * @return $this
      *
+     * @deprecated 1.3.0 use setFolderName instead
+     *
      */
     public function setFolder($folder) {
+        return $this->setFolderName($folder);
+    }
+
+    /**
+     * Change the folder to save into.
+     *
+     * Ensure to set the "Auto-create folders" options in https://cloudinary.com/console/settings/upload
+     * so folders are actually created.
+     *
+     * @param string $folder The folder or path
+     *
+     * @return $this
+     */
+    public function setFolderName($folder) {
         $this->folder = $folder;
 
         return $this;
@@ -199,5 +251,47 @@ class UploadField extends FormField {
         $this->cropping_aspect_ratio = $ratio;
 
         return $this;
+    }
+
+    /**
+     * Set allowed file extensions.
+     *
+     * @param array $rules
+     *
+     * @return UploadField|void
+     */
+    public function setAllowedExtensions($rules) {
+        if (!is_array($rules)) {
+            return $this;
+        }
+
+        // make sure all rules are lowercase
+        foreach ($rules as &$rule) {
+            $rule = strtolower($rule);
+        }
+
+        $this->allowedExtensions = $rules;
+
+        return $this;
+    }
+
+    /**
+     * Set allowed file extensions by category.
+     *
+     * Allowed categories are "image" or "image/supported", see File::$app_categories for included extensions.
+     *
+     * @param string $category
+     *
+     * @return UploadField
+     *
+     * @throws Exception
+     */
+    public function setAllowedFileCategories($category) {
+        if (!is_string($category) || !in_array($category, ['image', 'image/supported']))
+            throw new Exception(_t('Level51\Cloudinary\Cloudinary.ERR_INVALID_FILE_CATEGORY'));
+
+        $extensions = File::get_category_extensions($category);
+
+        return $this->setAllowedExtensions($extensions);
     }
 }

@@ -7,6 +7,7 @@ en:
     CTA_UPLOAD_REPLACE: Upload new
     DESTINATION_FOLDER: Destination folder
     ERR_DOWNLOAD_NO_PUBLIC_ID: '"public_id" not set for Cloudinary image {ImageID}'
+    ERR_INVALID_FILE_CATEGORY: Invalid file category. Valid categories are "image" or "image/supported".
     READ_ONLY_NO_IMAGE: No Image
     FILENAME: Name
     PUBLIC_ID: Public ID

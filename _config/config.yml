@@ -11,3 +11,4 @@ Level51\Cloudinary\Cloudinary:
   image_type: 'private'
   use_custom_gravity: true
   root_folder: ''
+  allowed_extensions: ['png', 'gif', 'jpeg']

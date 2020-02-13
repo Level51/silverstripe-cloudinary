@@ -156,8 +156,6 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
         resourceType: 'image',
 
         theme: this.payload.cloudinaryOptions.theme,
-
-        clientAllowedFormats: ['png', 'gif', 'jpeg'],
         // maxFileSize: 1500000, Number of bytes, no client side limit per default
         // maxImageHeight: 2000 // Client-isde scale down
         // maxImageWidth: 2000  // -- "" --
@@ -168,6 +166,11 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
 
         // TODO check useful additional options
       };
+
+      // Limit allowed file formats
+      if (this.payload.allowedExtensions) {
+        options.clientAllowedFormats = this.payload.allowedExtensions;
+      }
 
       /**
        * Check for signed uploads, add the apiKey and a function to generate the signature

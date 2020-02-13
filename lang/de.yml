@@ -7,6 +7,7 @@ de:
     CTA_UPLOAD_REPLACE: Neuer Upload
     DESTINATION_FOLDER: Zielordner
     ERR_DOWNLOAD_NO_PUBLIC_ID: 'Das Bild {ImageID} hat keine "public_id"'
+    ERR_INVALID_FILE_CATEGORY: Diese Datei Kategorie ist nicht gültig. Gültige Werte sind "image" oder "image/supported"
     READ_ONLY_NO_IMAGE: Kein Bild
     FILENAME: Name
     PUBLIC_ID: Public ID
