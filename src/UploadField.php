@@ -137,7 +137,7 @@ class UploadField extends FormField implements FileHandleField {
 
         if ($value) {
             if ($value instanceof Image && $value->exists()) return $value;
-            else if (is_int($value)) return Image::get()->byID($value);
+            else if (is_int($value) || is_string($value)) return Image::get()->byID($value);
         }
 
         return null;
