@@ -42,7 +42,9 @@
       <upload-file
         v-for="file in files"
         :key="file.id"
-        :file="file" />
+        :file="file"
+        :payload="payload"
+        @deleted="fileDeleted" />
     </div>
   </div>
 </template>
@@ -107,6 +109,9 @@ export default {
           }
         }
       );
+    },
+    fileDeleted(id) {
+      this.files.splice(this.files.findIndex(f => f.id === id), 1);
     }
   }
 };
@@ -126,7 +131,7 @@ export default {
     .level51-cmu-filesWrapper {
       display: flex;
       flex-wrap: wrap;
-      margin: @space-2 -@space-2 0;
+      margin: @space-2 -@space-1 0;
     }
   }
 </style>

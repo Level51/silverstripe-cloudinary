@@ -2596,6 +2596,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -2654,6 +2656,11 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       });
+    },
+    fileDeleted: function fileDeleted(id) {
+      this.files.splice(this.files.findIndex(function (f) {
+        return f.id === id;
+      }), 1);
     }
   }
 });
@@ -2834,6 +2841,35 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2843,18 +2879,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
-/*
- * TODO
- *  - styling
- *  - remove action
- *  - meta info
- *  - ...
- */
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     file: {
       type: Object,
       required: true
+    },
+    payload: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    fileMetaInfo: function fileMetaInfo() {
+      return "".concat(this.i18n('FORMAT'), ": ").concat(this.file.format, "\n").concat(this.i18n('HEIGHT'), ": ").concat(this.file.height, "px\n").concat(this.i18n('WIDTH'), ": ").concat(this.file.width, "px\n").concat(this.i18n('SIZE'), ": ").concat(this.file.niceSize);
+    }
+  },
+  methods: {
+    i18n: function i18n(label) {
+      var i18n = this.payload.i18n;
+      return i18n.hasOwnProperty(label) ? i18n[label] : label;
+    },
+    deleteFile: function deleteFile() {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("".concat(location.origin, "/admin/cloudinary/deleteImage"), {
+        data: {
+          id: this.file.id
+        }
+      }).then(function (response) {
+        // TODO error handling?
+        if (response.data) _this.$emit('deleted', _this.file.id);
+      });
     }
   }
 });
@@ -13210,7 +13266,11 @@ var render = function() {
           "div",
           { staticClass: "level51-cmu-filesWrapper" },
           _vm._l(_vm.files, function(file) {
-            return _c("upload-file", { key: file.id, attrs: { file: file } })
+            return _c("upload-file", {
+              key: file.id,
+              attrs: { file: file, payload: _vm.payload },
+              on: { deleted: _vm.fileDeleted }
+            })
           }),
           1
         )
@@ -13439,10 +13499,52 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "level51-cu-uploadedFile" }, [
-    _c("img", {
-      staticClass: "level51-cu-thumbnail",
-      attrs: { src: _vm.file.thumbnailURL }
-    })
+    _c("div", { staticClass: "level51-cu-imageContainer" }, [
+      _c("img", {
+        staticClass: "level51-cu-thumbnail",
+        attrs: { src: _vm.file.thumbnailURL }
+      })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "level51-cu-fileInfo" }, [
+      _vm._v("\n    " + _vm._s(_vm.file.filename) + "\n    "),
+      _c("i", {
+        staticClass: "level51-cu-fileMetaInfo font-icon-white-question",
+        attrs: { title: _vm.fileMetaInfo }
+      })
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "level51-cu-uploadedFile-actions" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-outline-primary btn-sm font-icon-external-link",
+          attrs: {
+            href: _vm.file.mediaLibraryLink,
+            target: "_blank",
+            rel: "nofollow noopener"
+          }
+        },
+        [_vm._v("\n      " + _vm._s(_vm.i18n("CTA_SHOW")) + "\n    ")]
+      ),
+      _vm._v(" "),
+      _vm.file
+        ? _c(
+            "button",
+            {
+              staticClass:
+                "level51-cu-deleteBtn btn btn-sm btn-outline-danger font-icon-trash-bin",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.deleteFile($event)
+                }
+              }
+            },
+            [_vm._v("\n      " + _vm._s(_vm.i18n("CTA_DELETE")) + "\n    ")]
+          )
+        : _vm._e()
+    ])
   ])
 }
 var staticRenderFns = []

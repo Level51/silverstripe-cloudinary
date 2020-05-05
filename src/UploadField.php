@@ -107,6 +107,7 @@ class UploadField extends FormField implements FileHandleField {
         $payload = [];
         $keys = [
             'CTA_DELETE',
+            'CTA_SHOW',
             'CTA_UPLOAD',
             'CTA_UPLOAD_REPLACE',
             'CTA_REMOVE',

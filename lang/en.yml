@@ -2,6 +2,7 @@ en:
   Level51\Cloudinary\Cloudinary:
     CLOUD_NAME: Cloud name
     CTA_DELETE: Delete
+    CTA_SHOW: Show
     CTA_REMOVE: Remove
     CTA_UPLOAD: Upload
     CTA_UPLOAD_REPLACE: Upload new
