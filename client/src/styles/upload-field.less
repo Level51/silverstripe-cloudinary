@@ -1,0 +1,51 @@
+@import "vars";
+
+.level51-cu-component {
+  border: 2px dashed @color-mono-80;
+  border-radius: @border-radius;
+  background: @color-mono-100;
+  padding: @space-2;
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  transition: all 250ms ease-in-out;
+  position: relative;
+
+  .level51-cu-fileMetaInfo {
+    cursor: help;
+  }
+
+  .level51-cu-errorMessage {
+    color: @color-error;
+  }
+
+  &.level51-cu-component--noFile {
+    justify-content: center;
+  }
+
+  &.level51-cu-component--dragging {
+    border-color: @color-success;
+    box-shadow: inset 0 0 10px @color-mono-90;
+    cursor: copy;
+  }
+
+  .level51-cu-thumbnailContainer {
+    margin-right: @space-2;
+  }
+
+  .level51-cu-fileInfo {
+    margin-bottom: @space-2;
+  }
+
+  .level51-cu-metaInfo {
+    position: absolute;
+    right: @space-2;
+    bottom: @space-1;
+    opacity: .75;
+    font-size: 0.75rem;
+
+    &:hover {
+      cursor: help;
+    }
+  }
+}

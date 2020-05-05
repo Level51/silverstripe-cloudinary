@@ -67,9 +67,11 @@ class UploadField extends FormField implements FileHandleField {
     /**
      * Get the frontend payload passed to the vue component.
      *
-     * @return string
+     * @param bool $asJSON
+     *
+     * @return string|array
      */
-    public function getPayload() {
+    public function getPayload($asJSON = true) {
         $payload = [
             'id'                => $this->ID(),
             'name'              => $this->getName(),
@@ -93,7 +95,7 @@ class UploadField extends FormField implements FileHandleField {
         if (self::$use_signed)
             $payload['cloudinaryOptions']['apiKey'] = Service::config()->get('api_key');
 
-        return json_encode($payload);
+        return $asJSON ? json_encode($payload) : $payload;
     }
 
     /**
@@ -105,6 +107,7 @@ class UploadField extends FormField implements FileHandleField {
         $payload = [];
         $keys = [
             'CTA_DELETE',
+            'CTA_SHOW',
             'CTA_UPLOAD',
             'CTA_UPLOAD_REPLACE',
             'CTA_REMOVE',
