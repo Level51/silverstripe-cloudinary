@@ -15,6 +15,7 @@ use SilverStripe\ORM\DataObject;
  * @property string $Version
  * @property string $Format
  * @property string $eTag
+ * @property string $AssetID
  * @property string $URL
  * @property string $Filename
  * @property string $ThumbnailURL
@@ -39,6 +40,7 @@ class Image extends DataObject {
         'Version'      => 'Varchar',
         'Format'       => 'Varchar(5)',
         'eTag'         => 'Varchar(100)',
+        'AssetID'      => 'Varchar(100)',
         'URL'          => 'Varchar(255)',
         'Filename'     => 'Varchar(255)',
         'ThumbnailURL' => 'Varchar(255)',
@@ -87,10 +89,17 @@ class Image extends DataObject {
      * @return String Link to the image in the Cloudinary media library.
      */
     public function getMediaLibraryLink() {
+        $publicIdParts = explode('/', $this->PublicID);
+        array_pop($publicIdParts);
+        $folder = '/' . implode('/', $publicIdParts);
+        $folder = urlencode($folder);
+
         return Controller::join_links(
-            'https://cloudinary.com/console/media_library/asset/image',
-            Service::config()->get('image_type'),
-            $this->PublicID
+            'https://cloudinary.com/console/media_library/folders',
+            $folder,
+            'asset',
+            $this->AssetID,
+            'manage'
         );
     }
 
@@ -527,6 +536,7 @@ class Image extends DataObject {
             'version'          => $this->Version,
             'format'           => $this->Format,
             'etag'             => $this->eTag,
+            'assetID'          => $this->AssetID,
             'url'              => $this->URL,
             'filename'         => $this->Filename,
             'thumbnailURL'     => $this->ThumbnailURL,

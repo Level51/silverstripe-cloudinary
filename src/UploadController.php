@@ -51,6 +51,9 @@ class UploadController extends Controller {
         $image->Width = $vars['width'];
         $image->Height = $vars['height'];
 
+        if (isset($vars['asset_id']))
+            $image->AssetID = $vars['asset_id'];
+
         $this->extend('onBeforeImageCreated', $image, $vars);
 
         try {
