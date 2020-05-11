@@ -1,6 +1,6 @@
 {
   "name": "silverstripe-cloudinary",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "SilverStripe Cloudinary image uploader",
   "authors": [
     "Daniel Kliemsch <dk@lvl51.de>"

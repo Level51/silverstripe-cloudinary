@@ -32,15 +32,59 @@ Level51\Cloudinary\Cloudinary:
   
 ```
 
-### Features
+## Usage
+```php
+
+private static $has_one = [
+    'Image' => \Level51\Cloudinary\Image::class
+];
+
+private static $has_many = [
+    'Images' => Image::class
+];
+
+public function getCMSFields() {
+	$fields = parent::getCMSFields();
+	
+	$fields->addFieldsToTab(
+		'Root.Main',
+		[
+			\Level51\Cloudinary\UploadField::create('Image', $this->fieldLabel('Image')),
+				// ->setRatio(16 / 9)
+				// ->disableCropping()
+				// ->setFolderName('path/to/destination')
+				// ->setAllowedExtensions(['jpg'])
+			\Level51\Cloudinary\MultiUploadField::create('Images', $this->fieldLabel('Images'))
+				// ->setAllowedMaxFileNumber(5)
+		]
+	);
+	
+	return $fields;
+}
+```
+
+```php
+// In templates
+$Image
+
+// With transormations
+$Image.FillMax(1920,1080)
+
+// With effect filters
+$Image.Grayscale.FillMax(1920,1080)
+```
+
+Checkout the available transformations and effects in the \Level51\Cloudinary\Image class.
+
+## Features
 - UploadField using the javascript upload widget - so direct uploads to Cloudinary
 - Store the relevant information in a Level51\Cloudinary\Image object
 
-### Requirements
+## Requirements
 - SilverStripe ^4.3 (see develop-ss3 branch or 0.x.x releases for SS3 support)
 - cloudinary_php ^1.9
 
-### Extend
+## Extend
 If you need any further fields just extend the Level51\Cloudinary\Image class with a data extension. To inject information returned by Cloudinary during the upload create another extension for the Level51\Cloudinary\UploadController and use one of the two extensions hooks **onBeforeImageCreated** or **onAfterImageCreated**. Both get passed the image object, either before or after the first write.
 
 ## Maintainer
