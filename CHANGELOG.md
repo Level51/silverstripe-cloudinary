@@ -1,3 +1,12 @@
+## [1.4.0] - 2020-05-11
+### Added
+- Multi Upload field
+- Store the Cloudinary "asset_id"
+
+### Fixed
+- Link to the Cloudinary media library
+- getFile method if the value is a string
+
 ## [1.3.0] - 2020-02-13
 ### Added
 - Missing string for DE
