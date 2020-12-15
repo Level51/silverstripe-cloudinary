@@ -1,0 +1,20 @@
+nl:
+  Level51\Cloudinary\Cloudinary:
+    CLOUD_NAME: Cloud Name
+    CTA_DELETE: Delete
+    CTA_SHOW: Bekijk
+    CTA_REMOVE: Verwijder
+    CTA_UPLOAD: Upload
+    CTA_UPLOAD_REPLACE: Nieuwe upload
+    DESTINATION_FOLDER: Bestemmingsmap
+    ERR_DOWNLOAD_NO_PUBLIC_ID: 'De Cloudinary afbeelding {ImageID} heeft geen "public_id"'
+    ERR_INVALID_FILE_CATEGORY: 'Deze bestandscategorie is niet geldig. Geldige waarden zijn "image" of "image/supported".'
+    READ_ONLY_NO_IMAGE: Geen afbeelding
+    FILENAME: Naam
+    PUBLIC_ID: Public ID
+    SIZE: Grootte
+    WIDTH: Breedte
+    HEIGHT: Hoogte
+    FORMAT: Formaat
+    CLOUDINARY_INFO: Cloudinary Info
+    ERR_MISSING_UPLOAD_PRESET: '"Level51\Cloudinary\Cloudinary.upload_preset" config is een verplicht veld'
