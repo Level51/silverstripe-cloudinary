@@ -1,3 +1,11 @@
+## [1.5.0] - 2020-12-16
+### Added
+- Dutch language file (thanks [blueskies79](https://github.com/blueskies79))
+
+### Fixed
+- `[User Warning] Missing default for localisation key` warnings (thanks [blueskies79](https://github.com/blueskies79))
+
+
 ## [1.4.0] - 2020-05-11
 ### Added
 - Multi Upload field
