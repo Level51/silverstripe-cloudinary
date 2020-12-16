@@ -124,7 +124,7 @@ class UploadField extends FormField implements FileHandleField {
         ];
 
         foreach ($keys as $key) {
-            $payload[$key] = _t('Level51\Cloudinary\Cloudinary.' . $key);
+            $payload[$key] = _t('Level51\Cloudinary\Cloudinary.' . $key, " ");
         }
 
         return $payload;
