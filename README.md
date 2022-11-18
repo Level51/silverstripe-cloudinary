@@ -15,7 +15,7 @@ Level51\Cloudinary\Cloudinary:
   theme: default 'white', 
   
   # https://cloudinary.com/documentation/upload_widget#signed_uploads
-  use_signed: true
+  use_signed: false
   
   # https://cloudinary.com/documentation/admin_api#delete_all_or_selected_resources
   image_type: 'private'
@@ -33,10 +33,11 @@ Level51\Cloudinary\Cloudinary:
 ```
 
 ## Usage
+
 ```php
 
 private static $has_one = [
-    'Image' => \Level51\Cloudinary\Image::class
+    'Image' => \Level51\Cloudinary\CloudinaryImage::class
 ];
 
 private static $has_many = [
@@ -49,12 +50,12 @@ public function getCMSFields() {
 	$fields->addFieldsToTab(
 		'Root.Main',
 		[
-			\Level51\Cloudinary\UploadField::create('Image', $this->fieldLabel('Image')),
+			\Level51\Cloudinary\CloudinaryUploadField::create('Image', $this->fieldLabel('Image')),
 				// ->setRatio(16 / 9)
 				// ->disableCropping()
 				// ->setFolderName('path/to/destination')
 				// ->setAllowedExtensions(['jpg'])
-			\Level51\Cloudinary\MultiUploadField::create('Images', $this->fieldLabel('Images'))
+			\Level51\Cloudinary\CloudinaryMultiCloudinaryUploadField::create('Images', $this->fieldLabel('Images'))
 				// ->setAllowedMaxFileNumber(5)
 		]
 	);

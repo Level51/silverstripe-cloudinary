@@ -9,26 +9,31 @@
     @dragenter="isDragging = true"
     @dragleave="isDragging = false"
     @dragend="isDragging = false"
-    @drop.prevent="handleFileDrop">
+    @drop.prevent="handleFileDrop"
+  >
     <div
       v-if="configError"
-      class="level51-cu-errorMessage">
+      class="level51-cu-errorMessage"
+    >
       {{ i18n('ERR_MISSING_UPLOAD_PRESET') }}
     </div>
 
     <template v-else>
       <div
         v-if="file"
-        class="level51-cu-thumbnailContainer">
+        class="level51-cu-thumbnailContainer"
+      >
         <img
           class="level51-cu-thumbnail"
-          :src="file.thumbnailURL">
+          :src="fileSrc"
+        >
       </div>
 
       <div>
         <div
           v-if="file"
-          class="level51-cu-fileInfo">
+          class="level51-cu-fileInfo"
+        >
           <strong>{{ i18n('FILENAME') }}:</strong> {{ file.filename }}
           <i
             class="level51-cu-fileMetaInfo font-icon-white-question"
@@ -39,7 +44,8 @@
           <a
             :href="file.mediaLibraryLink"
             target="_blank"
-            rel="nofollow noopener">
+            rel="nofollow noopener"
+          >
             {{ file.publicID }}
           </a>
         </div>
@@ -47,7 +53,8 @@
         <div class="level51-cu-actions">
           <button
             class="level51-cu-uploadBtn btn btn-outline-primary font-icon-upload"
-            @click="openWidget">
+            @click="openWidget"
+          >
             <template v-if="file">
               {{ i18n('CTA_UPLOAD_REPLACE') }}
             </template>
@@ -59,14 +66,16 @@
           <button
             v-if="showRemove"
             class="level51-cu-removeBtn btn btn-outline-danger font-icon-trash-bin"
-            @click.prevent="removeFile">
+            @click.prevent="removeFile"
+          >
             {{ i18n('CTA_REMOVE') }}
           </button>
 
           <button
             v-if="file"
             class="level51-cu-deleteBtn btn btn-outline-danger font-icon-trash-bin"
-            @click.prevent="deleteFile">
+            @click.prevent="deleteFile"
+          >
             {{ i18n('CTA_DELETE') }}
           </button>
         </div>
@@ -74,7 +83,8 @@
 
       <div
         class="level51-cu-metaInfo"
-        :title="metaInfo">
+        :title="metaInfo"
+      >
         {{ i18n('CLOUDINARY_INFO') }}
       </div>
     </template>
@@ -83,7 +93,8 @@
       type="hidden"
       :id="payload.id"
       :name="payload.name"
-      :value="value">
+      :value="value"
+    >
   </div>
 </template>
 
@@ -123,6 +134,13 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
       };
 
       return Object.assign({}, this.baseOptions, options);
+    },
+    fileSrc() {
+      if (this.file) {
+        return this.file.thumbnailURL ? this.file.thumbnailURL : this.file.url;
+      }
+
+      return null;
     }
   },
   methods: {

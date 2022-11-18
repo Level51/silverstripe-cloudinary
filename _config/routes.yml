@@ -5,6 +5,6 @@ Before:
 After:
   - 'admin-graphql-routes'
 ---
-SilverStripe\Control\Director:
+Director:
   rules:
-    'admin/cloudinary': 'Level51\Cloudinary\UploadController'
+    'admin/cloudinary': 'CloudinaryUploadController'

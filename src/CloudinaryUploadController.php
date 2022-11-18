@@ -1,17 +1,12 @@
 <?php
 
-namespace Level51\Cloudinary;
-
-use Exception;
-use SilverStripe\Control\Controller;
-
 /**
  * Controller for Cloudinary upload/image specific admin actions.
  *
  * Listens on the /admin/cloudinary route and handles the creation of
  * Image objects and also delete actions.
  */
-class UploadController extends Controller {
+class CloudinaryUploadController extends Controller {
 
     private static $allowed_actions = ['onAfterUpload', 'onAfterMultiUpload', 'deleteImage', 'deleteImages', 'generateSignature'];
 
@@ -24,7 +19,7 @@ class UploadController extends Controller {
     ];
 
     /**
-     * @throws \SilverStripe\Control\HTTPResponse_Exception
+     * @throws \SS_HTTPResponse_Exception
      */
     public function index() {
         return $this->httpError(403);
@@ -39,7 +34,7 @@ class UploadController extends Controller {
         else if (isset($vars['eager']) && is_array($vars['eager']) && !empty($vars['eager']))
             $thumbnail = $vars['eager'][0]['secure_url'];
 
-        $image = new Image();
+        $image = new CloudinaryImage();
         $image->PublicID = $vars['public_id'];
         $image->Version = $vars['version'];
         $image->Format = $vars['format'];
@@ -117,7 +112,7 @@ class UploadController extends Controller {
         if (!$body || empty($body) || !isset($body['id']))
             return false;
 
-        if ($image = Image::get()->byID($body['id'])) {
+        if ($image = CloudinaryImage::get()->byID($body['id'])) {
             $image->delete();
 
             return true;
@@ -130,6 +125,6 @@ class UploadController extends Controller {
      * @return string Generate a signature needed for signed uploads
      */
     public function generateSignature() {
-        return Service::inst()->sign($this->getRequest()->getVars());
+        return CloudinaryService::inst()->sign($this->getRequest()->getVars());
     }
 }

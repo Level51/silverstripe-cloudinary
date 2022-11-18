@@ -1,25 +1,16 @@
 <?php
 
-namespace Level51\Cloudinary;
-
-use Exception;
-use SilverStripe\Assets\File;
-use SilverStripe\Control\Controller;
-use SilverStripe\Forms\FileHandleField;
-use SilverStripe\Forms\FormField;
-use SilverStripe\View\Requirements;
-
 /**
  * Upload field for cloudinary using their javascript widget.
  *
  * @see https://cloudinary.com/documentation/upload_widget#upload_widget_options for available options
  */
-class UploadField extends FormField implements FileHandleField {
+class CloudinaryUploadField extends FormField {
 
     private $folder = '';
     private $cropping = 'server';
     private $cropping_aspect_ratio = null;
-    private static $use_signed = true;
+    private static $use_signed = false;
 
     protected $fieldHolderTemplate = 'UploadField_holder';
 
@@ -37,8 +28,8 @@ class UploadField extends FormField implements FileHandleField {
      * @return string
      */
     public function Field($properties = array()) {
-        Requirements::javascript('level51/silverstripe-cloudinary: client/dist/level51-cloudinary-upload-field.js');
-        Requirements::css('level51/silverstripe-cloudinary: client/dist/level51-cloudinary-upload-field.css');
+        Requirements::javascript(SILVERSTRIPE_CLOUDINARY_DIR . '/client/dist/level51-cloudinary-upload-field.js');
+        Requirements::css(SILVERSTRIPE_CLOUDINARY_DIR . '/client/dist/level51-cloudinary-upload-field.css');
 
         return parent::Field($properties);
     }
@@ -46,7 +37,7 @@ class UploadField extends FormField implements FileHandleField {
     /**
      * Return a clone with readonly flag set to true.
      *
-     * @return UploadField|FormField
+     * @return CloudinaryUploadField|FormField
      */
     public function performReadonlyTransformation() {
         $clone = clone $this;
@@ -61,7 +52,7 @@ class UploadField extends FormField implements FileHandleField {
      * @return boolean
      */
     public function showRemove() {
-        return !!Service::config()->get('show_remove');
+        return !!CloudinaryService::config()->get('show_remove');
     }
 
     /**
@@ -77,12 +68,12 @@ class UploadField extends FormField implements FileHandleField {
             'name'              => $this->getName(),
             'cloudinaryOptions' => [
                 'cloudName'           => $this->getCloudName(),
-                'uploadPreset'        => Service::config()->get('upload_preset'),
-                'theme'               => Service::config()->get('theme'),
-                'folder'              => $this->getFolder(),
+                'uploadPreset'        => CloudinaryService::config()->get('upload_preset'),
+                'theme'               => CloudinaryService::config()->get('theme'),
+                'folder'              => $this->getFolderName(),
                 'cropping'            => $this->cropping,
                 'croppingAspectRatio' => $this->cropping_aspect_ratio,
-                'useSigned'           => Service::config()->get('use_signed'),
+                'useSigned'           => CloudinaryService::config()->get('use_signed'),
                 'allowedExtensions'   => $this->getAllowedExtensions()
             ],
             'options'           => [
@@ -93,7 +84,7 @@ class UploadField extends FormField implements FileHandleField {
         ];
 
         if (self::$use_signed)
-            $payload['cloudinaryOptions']['apiKey'] = Service::config()->get('api_key');
+            $payload['cloudinaryOptions']['apiKey'] = CloudinaryService::config()->get('api_key');
 
         return $asJSON ? json_encode($payload) : $payload;
     }
@@ -124,7 +115,7 @@ class UploadField extends FormField implements FileHandleField {
         ];
 
         foreach ($keys as $key) {
-            $payload[$key] = _t('Level51\Cloudinary\Cloudinary.' . $key, " ");
+            $payload[$key] = _t('Cloudinary.' . $key, " ");
         }
 
         return $payload;
@@ -133,14 +124,14 @@ class UploadField extends FormField implements FileHandleField {
     /**
      * Get the cloudinary image record according to the value if set.
      *
-     * @return \SilverStripe\ORM\DataObject|Image|null
+     * @return DataObject|CloudinaryImage|null
      */
     public function getFile() {
         $value = $this->Value();
 
         if ($value) {
-            if ($value instanceof Image && $value->exists()) return $value;
-            else if (is_int($value) || is_string($value)) return Image::get()->byID($value);
+            if ($value instanceof CloudinaryImage && $value->exists()) return $value;
+            else if (is_int($value) || is_string($value)) return CloudinaryImage::get()->byID($value);
         }
 
         return null;
@@ -163,7 +154,7 @@ class UploadField extends FormField implements FileHandleField {
      * @return string
      */
     public function getFolderName() {
-        $root = Service::config()->get('root_folder');
+        $root = CloudinaryService::config()->get('root_folder');
 
         if (!$this->folder)
             return $root;
@@ -177,7 +168,7 @@ class UploadField extends FormField implements FileHandleField {
      * @return string
      */
     public function getCloudName() {
-        return Service::config()->get('cloud_name');
+        return CloudinaryService::config()->get('cloud_name');
     }
 
     /**
@@ -192,7 +183,7 @@ class UploadField extends FormField implements FileHandleField {
         }
 
         // Check for global setting via config API
-        if (($globalSetting = Service::config()->get('allowed_extensions')) &&
+        if (($globalSetting = CloudinaryService::config()->get('allowed_extensions')) &&
             is_array($globalSetting) &&
             count($globalSetting) > 0) {
             return $globalSetting;
@@ -265,7 +256,7 @@ class UploadField extends FormField implements FileHandleField {
      *
      * @param array $rules
      *
-     * @return UploadField|void
+     * @return CloudinaryUploadField|void
      */
     public function setAllowedExtensions($rules) {
         if (!is_array($rules)) {
@@ -289,15 +280,15 @@ class UploadField extends FormField implements FileHandleField {
      *
      * @param string $category
      *
-     * @return UploadField
+     * @return CloudinaryUploadField
      *
      * @throws Exception
      */
     public function setAllowedFileCategories($category) {
-        if (!is_string($category) || !in_array($category, ['image', 'image/supported']))
-            throw new Exception(_t('Level51\Cloudinary\Cloudinary.ERR_INVALID_FILE_CATEGORY'));
+        if (!is_string($category) || $category !== 'image')
+            throw new Exception(_t('Cloudinary.ERR_INVALID_FILE_CATEGORY'));
 
-        $extensions = File::get_category_extensions($category);
+        $extensions = \Config::inst()->get(File::class, 'app_categories')[$category];
 
         return $this->setAllowedExtensions($extensions);
     }

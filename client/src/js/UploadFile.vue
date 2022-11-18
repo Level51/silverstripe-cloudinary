@@ -3,7 +3,7 @@
     <div class="level51-cu-imageContainer">
       <img
         class="level51-cu-thumbnail"
-        :src="file.thumbnailURL">
+        :src="fileSrc">
     </div>
 
     <div
@@ -54,6 +54,9 @@ ${this.i18n('HEIGHT')}: ${this.file.height}px
 ${this.i18n('WIDTH')}: ${this.file.width}px
 ${this.i18n('SIZE')}: ${this.file.niceSize}`;
     },
+    fileSrc() {
+      return this.file.thumbnailURL ? this.file.thumbnailURL : this.file.url;
+    }
   },
   methods: {
     i18n(label) {

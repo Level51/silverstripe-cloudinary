@@ -1,15 +1,10 @@
 <?php
 
-namespace Level51\Cloudinary;
-
-use ReflectionClass;
 
 /**
  * Multi file upload field for cloudinary using their javascript widget.
- *
- * @package Level51\Cloudinary
  */
-class MultiUploadField extends UploadField {
+class CloudinaryMultiUploadField extends CloudinaryUploadField {
 
     /**
      * @var array

@@ -1,18 +1,14 @@
 <?php
 
-namespace Level51\Cloudinary;
-
-use Cloudinary;
 use Cloudinary\Uploader as API;
-use SilverStripe\Core\Config\Config;
 
 /**
- * Class Service
+ * Class CloudinaryService
  */
-class Service {
+class CloudinaryService {
 
     /**
-     * @var null|Service
+     * @var null|CloudinaryService
      */
     private static $instance = null;
 
@@ -29,7 +25,7 @@ class Service {
     private function __clone() { }
 
     /**
-     * @return Service
+     * @return CloudinaryService
      */
     public static function inst() {
         if (self::$instance === null) {
@@ -40,10 +36,10 @@ class Service {
     }
 
     /**
-     * @return \SilverStripe\Core\Config\Config_ForClass
+     * @return \Config_ForClass
      */
     public static function config() {
-        return Config::forClass('Level51\Cloudinary\Cloudinary');
+        return Config::inst()->forClass('Cloudinary');
     }
 
     /**
