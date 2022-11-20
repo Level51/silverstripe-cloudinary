@@ -17,16 +17,19 @@
 
     <div class="level51-cu-uploadedFile-actions">
       <a
-        class="btn btn-outline-primary btn-sm font-icon-external-link"
+        class="level51-btn level51-btn-outline-primary level51-btn-sm"
         :href="file.mediaLibraryLink"
         target="_blank"
         rel="nofollow noopener">
+        <fa-icon icon="external-link" />
         {{ i18n('CTA_SHOW') }}
       </a>
       <button
         v-if="file"
-        class="level51-cu-deleteBtn btn btn-sm btn-outline-danger font-icon-trash-bin"
+        class="level51-cu-deleteBtn level51-btn level51-btn-sm level51-btn-outline-danger"
         @click.prevent="deleteFile">
+        <fa-icon icon="trash-can" />
+
         {{ i18n('CTA_DELETE') }}
       </button>
     </div>
@@ -128,13 +131,14 @@ ${this.i18n('SIZE')}: ${this.file.niceSize}`;
         align-items: center;
       }
 
-      .btn-sm {
+      .level51-btn-sm {
         padding: .25rem .5rem;
         font-size: 0.875rem;
         line-height: 1.5;
         border-radius: .2rem;
         display: flex;
         align-items: center;
+        margin: 0 @space-1;
 
         &[class*=font-icon-]:before {
           font-size: 1rem;

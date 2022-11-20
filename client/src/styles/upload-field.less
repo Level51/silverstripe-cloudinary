@@ -49,3 +49,45 @@
     }
   }
 }
+
+.level51-cloudinaryUploadWrapper {
+  .level51-btn {
+    background: none !important;
+    outline: 0;
+    padding: @space-1 @space-2;
+    border: 1px solid transparent;
+    box-shadow: none !important;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+    text-shadow: none;
+    color: @color-text;
+    text-decoration: none !important;
+
+    span.ui-button-text {
+      padding: 0;
+    }
+
+    svg {
+      margin-right: @space-1;
+    }
+
+    &.level51-btn-outline-danger {
+      border-color: @color-error;
+
+      &:hover {
+        background: @color-error !important;
+        color: @color-mono-100;
+      }
+    }
+
+    &.level51-btn-outline-primary {
+      border-color: @color-success;
+
+      &:hover {
+        background: @color-success !important;
+        color: @color-mono-100;
+      }
+    }
+  }
+}

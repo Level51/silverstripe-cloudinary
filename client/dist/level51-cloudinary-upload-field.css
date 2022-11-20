@@ -46,6 +46,39 @@
 .level51-cu-component .level51-cu-metaInfo:hover {
   cursor: help;
 }
+.level51-cloudinaryUploadWrapper .level51-btn {
+  background: none !important;
+  outline: 0;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  box-shadow: none !important;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 250ms ease-in-out;
+  text-shadow: none;
+  color: #333333;
+  text-decoration: none !important;
+}
+.level51-cloudinaryUploadWrapper .level51-btn span.ui-button-text {
+  padding: 0;
+}
+.level51-cloudinaryUploadWrapper .level51-btn svg {
+  margin-right: 5px;
+}
+.level51-cloudinaryUploadWrapper .level51-btn.level51-btn-outline-danger {
+  border-color: #c50022;
+}
+.level51-cloudinaryUploadWrapper .level51-btn.level51-btn-outline-danger:hover {
+  background: #c50022 !important;
+  color: #fff;
+}
+.level51-cloudinaryUploadWrapper .level51-btn.level51-btn-outline-primary {
+  border-color: #65ac1e;
+}
+.level51-cloudinaryUploadWrapper .level51-btn.level51-btn-outline-primary:hover {
+  background: #65ac1e !important;
+  color: #fff;
+}
 .level51-cu-component .level51-cu-fileMetaInfo {
   cursor: help;
 }
@@ -100,15 +133,16 @@
   display: flex;
   align-items: center;
 }
-.level51-cu-uploadedFile .level51-cu-uploadedFile-actions .btn-sm {
+.level51-cu-uploadedFile .level51-cu-uploadedFile-actions .level51-btn-sm {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
   line-height: 1.5;
   border-radius: 0.2rem;
   display: flex;
   align-items: center;
+  margin: 0 5px;
 }
-.level51-cu-uploadedFile .level51-cu-uploadedFile-actions .btn-sm[class*=font-icon-]:before {
+.level51-cu-uploadedFile .level51-cu-uploadedFile-actions .level51-btn-sm[class*=font-icon-]:before {
   font-size: 1rem;
 }
 
@@ -159,6 +193,39 @@
 }
 .level51-cu-component .level51-cu-metaInfo:hover {
   cursor: help;
+}
+.level51-cloudinaryUploadWrapper .level51-btn {
+  background: none !important;
+  outline: 0;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  box-shadow: none !important;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 250ms ease-in-out;
+  text-shadow: none;
+  color: #333333;
+  text-decoration: none !important;
+}
+.level51-cloudinaryUploadWrapper .level51-btn span.ui-button-text {
+  padding: 0;
+}
+.level51-cloudinaryUploadWrapper .level51-btn svg {
+  margin-right: 5px;
+}
+.level51-cloudinaryUploadWrapper .level51-btn.level51-btn-outline-danger {
+  border-color: #c50022;
+}
+.level51-cloudinaryUploadWrapper .level51-btn.level51-btn-outline-danger:hover {
+  background: #c50022 !important;
+  color: #fff;
+}
+.level51-cloudinaryUploadWrapper .level51-btn.level51-btn-outline-primary {
+  border-color: #65ac1e;
+}
+.level51-cloudinaryUploadWrapper .level51-btn.level51-btn-outline-primary:hover {
+  background: #65ac1e !important;
+  color: #fff;
 }
 .level51-cmu .level51-cu-component.level51-cu-component--disabled {
   pointer-events: none;

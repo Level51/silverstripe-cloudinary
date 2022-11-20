@@ -1,5 +1,5 @@
 de:
-  Level51\Cloudinary\Cloudinary:
+  Cloudinary:
     CLOUD_NAME: Cloud Name
     CTA_DELETE: Löschen
     CTA_SHOW: Anzeigen

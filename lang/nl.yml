@@ -1,5 +1,5 @@
 nl:
-  Level51\Cloudinary\Cloudinary:
+  Cloudinary:
     CLOUD_NAME: Cloud Name
     CTA_DELETE: Delete
     CTA_SHOW: Bekijk

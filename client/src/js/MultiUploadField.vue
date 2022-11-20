@@ -21,8 +21,9 @@
         <div>
           <div class="level51-cu-actions">
             <button
-              class="level51-cu-uploadBtn btn btn-outline-primary font-icon-upload"
+              class="level51-cu-uploadBtn level51-btn level51-btn-outline-primary"
               @click="openWidget">
+              <fa-icon icon="upload" />
               {{ i18n('CTA_UPLOAD') }}
             </button>
           </div>

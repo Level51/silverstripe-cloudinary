@@ -1,4 +1,5 @@
 import axios from 'axios';
+import './icons';
 
 export default {
   props: {
