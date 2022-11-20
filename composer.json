@@ -25,10 +25,5 @@
   "extra": {
     "installer-name": "cloudinary"
   },
-  "minimum-stability": "dev",
-  "autoload": {
-    "psr-4": {
-      "Level51\\Cloudinary\\": "src/"
-    }
-  }
+  "minimum-stability": "dev"
 }
