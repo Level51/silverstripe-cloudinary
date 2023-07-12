@@ -1,6 +1,6 @@
 {
-  "name": "level51/silverstripe-cloudinary",
-  "version": "1.5.0",
+  "name": "directlease/silverstripe-cloudinary",
+  "version": "2",
   "time": "2020-12-16",
   "description": "Cloudinary image handling & upload field for SilverStripe",
   "keywords": [
@@ -16,11 +16,11 @@
     }
   ],
   "require": {
-    "php": ">=7.0",
+    "php": ">=8.0",
     "ext-json": "*",
-    "silverstripe/framework": "^4.3",
-    "cloudinary/cloudinary_php": "^1.9",
-    "nesbot/carbon": "^1.34"
+    "silverstripe/framework": "^5",
+    "cloudinary/cloudinary_php": "^2",
+    "nesbot/carbon": "^2"
   },
   "extra": {
     "installer-name": "cloudinary",
@@ -32,6 +32,12 @@
   "autoload": {
     "psr-4": {
       "Level51\\Cloudinary\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "silverstripe/vendor-plugin": true
     }
   }
 }
