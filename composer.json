@@ -1,5 +1,5 @@
 {
-  "name": "directlease/silverstripe-cloudinary",
+  "name": "level51/silverstripe-cloudinary",
   "version": "2",
   "time": "2020-12-16",
   "description": "Cloudinary image handling & upload field for SilverStripe",
@@ -32,12 +32,6 @@
   "autoload": {
     "psr-4": {
       "Level51\\Cloudinary\\": "src/"
-    }
-  },
-  "config": {
-    "allow-plugins": {
-      "composer/installers": true,
-      "silverstripe/vendor-plugin": true
     }
   }
 }
