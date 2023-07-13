@@ -26,7 +26,7 @@ use SilverStripe\ORM\DataObject;
 class Image extends DataObject {
 
     private $transformOptions = null;
-    private $effectOptions = null;
+    private ?array $effectOptions = null;
 
     private static $artistic_filters = [
         'al_dente', 'athena', 'audrey', 'aurora', 'daguerre', 'eucalyptus', 'fes', 'frost', 'hairspray', 'hokusai',
@@ -570,16 +570,17 @@ class Image extends DataObject {
      * @throws \Exception
      */
     public function getTemporaryDownloadLink($expires = null, $asDownload = true) {
-
-        // Break if public id unknown
-        if (!$this->PublicID)
-            throw new Exception(_t('Level51\Cloudinary\Cloudinary.ERR_DOWNLOAD_NO_PUBLIC_ID', null, null, [
-                'ImageID' => $this->ID
-            ]));
-
-        if (!$expires)
-            $expires = Carbon::now()->addHour()->format('U');
-
-        return Service::inst()->privateDownloadLink($this->PublicID, $this->Format, $expires, $asDownload);
+//
+//        // Break if public id unknown
+//        if (!$this->PublicID)
+//            throw new Exception(_t('Level51\Cloudinary\Cloudinary.ERR_DOWNLOAD_NO_PUBLIC_ID', null, null, [
+//                'ImageID' => $this->ID
+//            ]));
+//
+//        if (!$expires)
+//            $expires = Carbon::now()->addHour()->format('U');
+//
+//        return Service::inst()->privateDownloadLink($this->PublicID, $this->Format, $expires, $asDownload);
+        return "";
     }
 }

@@ -1,0 +1,116 @@
+{
+    "name": "silverstripe/framework",
+    "type": "silverstripe-vendormodule",
+    "description": "The SilverStripe framework",
+    "homepage": "http://silverstripe.org",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "silverstripe",
+        "framework"
+    ],
+    "authors": [
+        {
+            "name": "SilverStripe",
+            "homepage": "http://silverstripe.com"
+        },
+        {
+            "name": "The SilverStripe Community",
+            "homepage": "http://silverstripe.org"
+        }
+    ],
+    "bin": [
+        "sake"
+    ],
+    "require": {
+        "php": "^8.1",
+        "composer/installers": "^2.2",
+        "guzzlehttp/guzzle": "^7.5.0",
+        "guzzlehttp/psr7": "^2.4.0",
+        "embed/embed": "^4.4.7",
+        "league/csv": "^9.8.0",
+        "m1/env": "^2.2.0",
+        "masterminds/html5": "^2.7.6",
+        "monolog/monolog": "^3.2.0",
+        "nikic/php-parser": "^4.15.0",
+        "psr/container": "^1.1 || ^2.0",
+        "psr/http-message": "^1",
+        "sebastian/diff": "^4.0",
+        "silverstripe/config": "^2",
+        "silverstripe/assets": "^2",
+        "silverstripe/vendor-plugin": "^2",
+        "sminnee/callbacklist": "^0.1.1",
+        "symfony/cache": "^6.1",
+        "symfony/config": "^6.1",
+        "symfony/dom-crawler": "^6.1",
+        "symfony/filesystem": "^6.1",
+        "symfony/mailer": "^6.1",
+        "symfony/mime": "^6.1",
+        "symfony/translation": "^6.1",
+        "symfony/yaml": "^6.1",
+        "ext-ctype": "*",
+        "ext-dom": "*",
+        "ext-hash": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-session": "*",
+        "ext-simplexml": "*",
+        "ext-tokenizer": "*",
+        "ext-xml": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "silverstripe/versioned": "^2",
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+    "conflict": {
+        "egulias/email-validator": "^2",
+        "oscarotero/html-parser": "<0.1.7",
+        "symfony/process": "<5.3.7"
+    },
+    "provide": {
+        "psr/container-implementation": "1.0.0"
+    },
+    "extra": {
+        "expose": [
+            "client/images",
+            "client/styles"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "SilverStripe\\Control\\": "src/Control/",
+            "SilverStripe\\Control\\Tests\\": "tests/php/Control/",
+            "SilverStripe\\Core\\": "src/Core/",
+            "SilverStripe\\Core\\Tests\\": "tests/php/Core/",
+            "SilverStripe\\Dev\\": "src/Dev/",
+            "SilverStripe\\Dev\\Tests\\": "tests/php/Dev/",
+            "SilverStripe\\Forms\\": "src/Forms/",
+            "SilverStripe\\Forms\\Tests\\": "tests/php/Forms/",
+            "SilverStripe\\i18n\\": "src/i18n/",
+            "SilverStripe\\i18n\\Tests\\": "tests/php/i18n/",
+            "SilverStripe\\Logging\\": "src/Logging/",
+            "SilverStripe\\Logging\\Tests\\": "tests/php/Logging/",
+            "SilverStripe\\ORM\\": "src/ORM/",
+            "SilverStripe\\ORM\\Tests\\": "tests/php/ORM/",
+            "SilverStripe\\Security\\": "src/Security/",
+            "SilverStripe\\Security\\Tests\\": "tests/php/Security/",
+            "SilverStripe\\View\\": "src/View/",
+            "SilverStripe\\View\\Tests\\": "tests/php/View/",
+            "SilverStripe\\Framework\\Tests\\Behaviour\\": "tests/behat/src/"
+        },
+        "files": [
+            "src/includes/constants.php"
+        ]
+    },
+    "include-path": [
+        "thirdparty/"
+    ],
+    "scripts": {
+        "lint": "phpcs src/ tests/php/ tests/behat/src/",
+        "lint-clean": "phpcbf src/ tests/php/ tests/behat/src/",
+        "php-peg": "php thirdparty/php-peg/cli.php src/View/SSTemplateParser.peg > src/View/SSTemplateParser.php"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
