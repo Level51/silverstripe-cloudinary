@@ -2,15 +2,9 @@
 
 namespace Level51\Cloudinary;
 
-use Cloudinary\Api\ApiResponse;
-use Cloudinary\Api\ApiUtils;
-use Cloudinary\Asset\Image;
-use Cloudinary\Cloudinary;
-use Cloudinary\Configuration\Configuration;
-use Cloudinary\Api\Upload\UploadApi as API;
-use Cloudinary\Tag\ImageTag;
+use Cloudinary;
+use Cloudinary\Uploader as API;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Config\Config_ForClass;
 
 /**
  * Class Service
@@ -20,12 +14,12 @@ class Service {
     /**
      * @var null|Service
      */
-    private static ?Service $instance = null;
+    private static $instance = null;
 
     private function __construct() {
 
         // Set Cloudinary api credentials
-        Configuration::instance()->init(array(
+        \Cloudinary::config(array(
             "cloud_name" => self::config()->get('cloud_name'),
             "api_key"    => self::config()->get('api_key'),
             "api_secret" => self::config()->get('api_secret')
@@ -35,10 +29,9 @@ class Service {
     private function __clone() { }
 
     /**
-     * @return Service|null
+     * @return Service
      */
-    public static function inst(): ?Service
-    {
+    public static function inst() {
         if (self::$instance === null) {
             self::$instance = new self;
         }
@@ -47,10 +40,9 @@ class Service {
     }
 
     /**
-     * @return Config_ForClass
+     * @return \SilverStripe\Core\Config\Config_ForClass
      */
-    public static function config(): Config_ForClass
-    {
+    public static function config() {
         return Config::forClass('Level51\Cloudinary\Cloudinary');
     }
 
@@ -59,13 +51,12 @@ class Service {
      *
      * @param string $publicID CL public_id of the resource
      *
-     * @return ApiResponse
+     * @return mixed
      *
      * @see https://cloudinary.com/documentation/admin_api#delete_all_or_selected_resources
      */
-    public function destroy(string $publicID): ApiResponse
-    {
-        return (new API)->destroy($publicID, [
+    public function destroy($publicID) {
+        return API::destroy($publicID, [
                 'invalidate' => true,
                 'type'       => self::config()->get('image_type')
             ]
@@ -73,7 +64,7 @@ class Service {
     }
 
     /**
-     * Generates a signature for uploads to CL backend.
+     * Generates an signature for uploads to CL backend.
      *
      * @param array $paramsToSign
      *
@@ -81,9 +72,8 @@ class Service {
      *
      * @see https://cloudinary.com/documentation/upload_images#generating_authentication_signatures
      */
-    public function sign(array $paramsToSign): string
-    {
-        return ApiUtils::signParameters(
+    public function sign($paramsToSign) {
+        return Cloudinary::api_sign_request(
             $paramsToSign,
             self::config()->get('api_secret')
         );
@@ -99,14 +89,14 @@ class Service {
      *
      * @return string
      */
-//    public function privateDownloadLink($publicID, $format, $expires, $asDownload) {
-//        $params = ['expires_at' => $expires];
-//
-//        if ($asDownload)
-//            $params['attachment'] = true;
-//
-//        return Cloudinary::private_download_url($publicID, $format, $params);
-//    }
+    public function privateDownloadLink($publicID, $format, $expires, $asDownload) {
+        $params = ['expires_at' => $expires];
+
+        if ($asDownload)
+            $params['attachment'] = true;
+
+        return Cloudinary::private_download_url($publicID, $format, $params);
+    }
 
     /**
      * Get the Cloudinary url for the given public id including options.
@@ -117,6 +107,6 @@ class Service {
      * @return string
      */
     public function getCloudinaryUrl($publicID, $options) {
-        return (string) Image::fromParams($publicID, $options)->toUrl();
+        return Cloudinary::cloudinary_url($publicID, $options);
     }
 }
