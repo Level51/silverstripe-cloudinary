@@ -118,7 +118,7 @@ class Service {
      * @return string
      */
     public function getCloudinaryUrl($publicID, $options) {
-        if (!$publicID)
+        if (!$publicID || $publicID == "")
             return "";
         return (string) Image::fromParams($publicID, $options)->toUrl();
     }
