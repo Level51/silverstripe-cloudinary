@@ -1,6 +1,18 @@
 # SilverStripe Cloudinary image uploader
 Adds a **Level51\Cloudinary\Image** data object and an appropriate uploader using Cloudinary's javascript upload widget.
 
+## Install
+
+```
+composer require level51/silverstripe-cloudinary
+```
+
+| Module Version | Silverstripe Version | PHP Version |
+|----------------|----------------------|-------------|
+| 2.x            | 5.x                  | >=8         |
+| 1.x            | 4.x                  | >=7         |
+| 0.x            | 3.x                  | >=5.6,<7.2  |
+
 ## Setup
 You have to define some mandatory configuration to get started:
 
