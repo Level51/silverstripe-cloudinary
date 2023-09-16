@@ -562,6 +562,7 @@ class Image extends DataObject {
     }
 
     /**
+     * @deprecated
      * @param int  $expires How long the URL should be valid as unix timestamp
      *
      * @param bool $asDownload
